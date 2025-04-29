@@ -28,12 +28,9 @@ export default function RegisterPage() {
           placeholder="Password"
         />
         <select className="select my-3 rounded-sm border-0 w-full max-w-xs">
-          <option disabled selected>
-            Select gender
-          </option>
+          <option value="">Select gender</option>
           <option>Female</option>
           <option>Male</option>
-          <option>Others</option>
         </select>
         <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
           Register
