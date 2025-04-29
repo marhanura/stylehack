@@ -1,5 +1,7 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
+import { hashPassword } from "../helpers/bcrypt";
+import CustomError from "../helpers/CustomError";
 
 export interface IUser {
   name: string;
@@ -26,6 +28,23 @@ export default class UserModel {
     return users;
   }
 
+
+  static async register(payload: IUser): Promise<string> {
+    const collection = this.getCollection();
+
+    let user = await collection.findOne({ email: payload.email });
+    if (user) {
+      throw new CustomError("Email must be unique", 400);
+    }
+
+    await collection.insertOne({
+      ...payload,
+      password: hashPassword(payload.password),
+    });
+
+    return "Successfully registered";
+  }
+  
   static async delete(id: ObjectId){
     const collection = this.getCollection()
     const result = await collection.deleteOne({_id: id})
