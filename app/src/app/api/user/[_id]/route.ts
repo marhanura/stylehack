@@ -8,7 +8,7 @@ interface IParams {
 export async function GET(request: Request, params: IParams) {
   try {
     const { _id } = await params.params;
-   
+
     const data = await User.findOrFail(_id);
 
     return Response.json(data.getOriginal());
@@ -16,7 +16,7 @@ export async function GET(request: Request, params: IParams) {
     if (error instanceof MongoloquentNotFoundException) {
       return Response.json(
         { message: error.message },
-        { status: error.status ? error.status : 500 }
+        { status: error.status ? error.status : 404 }
       );
     }
 
@@ -24,4 +24,19 @@ export async function GET(request: Request, params: IParams) {
   }
 }
 
-
+export async function DELETE(request: Request, params: IParams) {
+  try {
+    const { _id } = await params.params;
+    const data = await User.findOrFail(_id);
+    await data.delete();
+    return Response.json({ message: `Success delete user with id ${_id} `});
+  } catch (error) {
+    if (error instanceof MongoloquentNotFoundException) {
+      return Response.json(
+        { message: error.message },
+        { status: error.status ? error.status : 404 }
+      );
+    }
+    return Response.json({ message: "ise" }, { status: 500 });
+  }
+}
