@@ -25,4 +25,10 @@ export default class UserModel {
     const users = await collection.findOne(payload);
     return users;
   }
+
+  static async delete(id: ObjectId){
+    const collection = this.getCollection()
+    const result = await collection.deleteOne({_id: id})
+    return result
+  }
 }
