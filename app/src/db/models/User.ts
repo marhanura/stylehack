@@ -5,6 +5,8 @@ import {
   IMongoloquentTimestamps,
 } from "mongoloquent";
 
+
+
 export interface IUser extends IMongoloquentSchema, IMongoloquentTimestamps {
   name: string;
   email: string;
