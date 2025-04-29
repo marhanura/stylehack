@@ -1,6 +1,5 @@
-import { hashPassword } from "@/db/helpers/bcrypt";
 import CustomError from "@/db/helpers/CustomError";
-import User from "@/db/models/User";
+import UserModel from "@/db/models/UserModel";
 import { NextRequest, NextResponse } from "next/server";
 import { z, ZodError } from "zod";
 
@@ -34,21 +33,16 @@ export async function POST(req: NextRequest) {
     newUserSchema.parse(payload);
     const { name, email, password, gender } = payload;
 
-    const user = await User.where("email", email).first();
-    if (user) {
-      throw new CustomError("Email must be unique", 400);
-    }
-
-    await User.create({
+    const message = await UserModel.register({
       name,
       email,
-      password: hashPassword(password),
+      password,
       gender,
       quota: 10,
       isPremium: false,
     });
 
-    return NextResponse.json({ message: "Successfully registered user" });
+    return NextResponse.json({ message });
   } catch (err: unknown) {
     if (err instanceof ZodError) {
       const error = err.errors[0];
