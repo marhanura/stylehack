@@ -38,8 +38,7 @@ export async function middleware(request: NextRequest) {
         { message: err.message },
         { status: err.status }
       );
-
-    if (
+    else if (
       err instanceof JWSInvalid ||
       err instanceof JWSSignatureVerificationFailed
     ) {
