@@ -12,14 +12,14 @@ export default function RegisterPage() {
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
-          name="email"
-          placeholder="Email"
+          name="name"
+          placeholder="Name"
         />
         <input
           className="input my-3 rounded-sm border-0"
-          type="email"
-          name="username"
-          placeholder="Username"
+          type="text"
+          name="email"
+          placeholder="Email"
         />
         <input
           className="input my-3 rounded-sm border-0"
