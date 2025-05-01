@@ -1,3 +1,4 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import ImageHistory from "../../../public/image4.webp";
@@ -16,15 +17,6 @@ export default function ProfilePage() {
             <h1>Wanda</h1>
             <p>wanda@mail.com</p>
             <div>
-              <h1 className="font-bold">Membership Status:</h1>
-              <div className="inline-flex items-center gap-2">
-                <p>Free</p>
-                <button className="p-1 btn text-[10px] h-6">
-                  Upgrade to Premium
-                </button>
-              </div>
-            </div>
-            <div>
               <h1 className="font-bold">Available Tokens</h1>
               <progress
                 className="progress progress-accent w-56"
@@ -32,9 +24,27 @@ export default function ProfilePage() {
                 max="100"
               ></progress>
               <span className="text-center ml-5">7 token</span>
-              <button className="p-1 btn text-[10px] h-6">
-                Upgrade to Premium
+              <button
+                className="btn"
+                onClick={() =>
+                  document.getElementById("my_modal_1").showModal()
+                }
+              >
+                Buy Token
               </button>
+              <dialog id="my_modal_1" className="modal">
+                <div className="modal-box">
+                  <h3 className="font-bold text-lg">Buy Token</h3>
+                  <p className="font-bold text-lg">Rp. 99.000</p>
+                  <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
+                  <div className="modal-action flex justify-between">
+                    <button className="btn">Buy Token</button>
+                    <form method="dialog">
+                      <button className="btn">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black h-full">
