@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest){
   try {
-    const _id = "680f9202609d28de2614f266"
-    await UserModel.delete(new ObjectId(_id))
+    const _id = request.headers.get("x-user-id")
+    await UserModel.delete(new ObjectId(_id as string))
     return Response.json({message: "Success delete user"})
   } catch (error) {
     return Response.json({message: "ISE"}, {status: 500})
