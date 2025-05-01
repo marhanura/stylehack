@@ -13,9 +13,9 @@ export default class WishlistModel {
     return db.collection<IWishlist>("Wishlists");
   }
 
-  static async findOne(recommendationId: ObjectId) {
+  static async findOne(_id: ObjectId) {
     const collection = this.getCollection();
-    const wishlist = await collection.findOne(recommendationId);
+    const wishlist = await collection.findOne(_id);
     return wishlist;
   }
 
@@ -33,5 +33,11 @@ export default class WishlistModel {
     await collection.insertOne(payload);
 
     return "Successfully added wishlist";
+  }
+
+  static async deleteWishlist(id: ObjectId) {
+    const collection = this.getCollection();
+    const result = await collection.deleteOne({ _id: id });
+    return result;
   }
 }
