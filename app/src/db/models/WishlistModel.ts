@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
+import CustomError from "../helpers/CustomError";
 
 export interface IWishlist {
   userId: ObjectId;
@@ -20,6 +21,14 @@ export default class WishlistModel {
 
   static async createWishlist(payload: IWishlist): Promise<string> {
     const collection = this.getCollection();
+
+    const wishlist = await collection.findOne({
+      recomendationId: payload.recomendationId,
+      userId: payload.userId,
+    });
+    if (wishlist) {
+      throw new CustomError("recommendation is already in wishlist", 400);
+    }
 
     await collection.insertOne(payload);
 

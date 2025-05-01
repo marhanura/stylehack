@@ -16,13 +16,6 @@ export async function POST(req: NextRequest) {
       throw new CustomError("recommendationId is required", 400);
     }
 
-    const wishlist = await WishlistModel.findOne(
-      new ObjectId(recommendationId)
-    );
-    if (wishlist) {
-      throw new CustomError("recommendation is already in wishlist", 400);
-    }
-
     const message = await WishlistModel.createWishlist({
       userId: new ObjectId(_id),
       recomendationId: new ObjectId(recommendationId),
