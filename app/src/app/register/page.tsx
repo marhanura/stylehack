@@ -1,14 +1,52 @@
+"use server";
 import Image from "next/image";
 import Logo from "../../../public/logotext.png";
 import RegisterImage from "../../../public/register.webp";
-export default function RegisterPage() {
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
+export async function handleRegister(formData: FormData): Promise<void> {
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const gender = formData.get("gender");
+
+  const res = await fetch(`http://localhost:3000/api/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      gender,
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    redirect(`/register?error=${data.message}`);
+  }
+  redirect("/login");
+}
+
+export default async function RegisterPage() {
   return (
     <div className="flex flex-row h-screen bg-[#E7DFD1]">
-      <form className="flex flex-col flex-1 p-15 items-center justify-center">
+      <form
+        className="flex flex-col flex-1 p-15 items-center justify-center"
+        action={handleRegister}
+      >
         <Image src={Logo} height={30} alt="Logo" className="mb-5" />
         <h1 className="font-(family-name:--font-bodoni-moda) text-[28px]">
           Register
         </h1>
+        <input
+          className="input my-3 rounded-sm border-0"
+          type="text"
+          name="name"
+          placeholder="Name"
+        />
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
@@ -17,24 +55,24 @@ export default function RegisterPage() {
         />
         <input
           className="input my-3 rounded-sm border-0"
-          type="email"
-          name="username"
-          placeholder="Username"
-        />
-        <input
-          className="input my-3 rounded-sm border-0"
           type="password"
           name="password"
           placeholder="Password"
         />
-        <select className="select my-3 rounded-sm border-0 w-full max-w-xs">
+        <select
+          className="select my-3 rounded-sm border-0 w-full max-w-xs"
+          name="gender"
+        >
           <option value="">Select gender</option>
-          <option>Female</option>
-          <option>Male</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
         </select>
         <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
           Register
         </button>
+        <p>
+          Already have an account? <Link href="/login">Log In</Link>
+        </p>
       </form>
       <div className="flex flex-1 justify-center items-center">
         <Image
