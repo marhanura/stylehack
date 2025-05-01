@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div className="w-full">
+    <div className="w-full shadow-sm">
       <div className="navbar bg-[#e7dfd1] border-b-1 border-gray-300 w-full">
         <div className="navbar-start">
           <div className="dropdown">
