@@ -11,13 +11,18 @@ export default function ProfilePage() {
       <div className="m-10 bg-[#E7DFD1] p-10 h-100 flex flex-col">
         <h1 className="text-center mb-5">Profile</h1>
         <div className="flex flex-row justify-center items-center h-full">
-          <div className="flex-1 flex flex-col border-r-1 border-black h-full gap-3">
+          <div className="flex-1 flex flex-col border-r-1 border-black h-full gap-2">
             <div className="rounded w-20 h-20 bg-primary"></div>
             <h1>Wanda</h1>
             <p>wanda@mail.com</p>
             <div>
               <h1 className="font-bold">Membership Status:</h1>
-              <p>Free</p>
+              <div className="inline-flex items-center gap-2">
+                <p>Free</p>
+                <button className="p-1 btn text-[10px] h-6">
+                  Upgrade to Premium
+                </button>
+              </div>
             </div>
             <div>
               <h1 className="font-bold">Available Tokens</h1>
@@ -26,6 +31,10 @@ export default function ProfilePage() {
                 value="70"
                 max="100"
               ></progress>
+              <span className="text-center ml-5">7 token</span>
+              <button className="p-1 btn text-[10px] h-6">
+                Upgrade to Premium
+              </button>
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black h-full">
@@ -42,7 +51,7 @@ export default function ProfilePage() {
               </Link>
             </div>
             <Link
-              href="/users/recommendation"
+              href="/history"
               className="p-1 bg-primary text-primary-content w-50 text-sm button-slide"
             >
               View All
@@ -62,7 +71,7 @@ export default function ProfilePage() {
               </Link>
             </div>
             <Link
-              href="/users/wishlist"
+              href="/wishlist"
               className="p-1 bg-primary text-primary-content w-50 text-sm button-slide"
             >
               View All
