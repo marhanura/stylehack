@@ -1,21 +1,23 @@
 import CustomError from "@/db/helpers/CustomError";
-import UserModel, { IUser } from "@/db/models/UserModel";
+import UserModel from "@/db/models/UserModel";
 import { ObjectId } from "mongodb";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    // const body: {_id: string} = await request.json()
-    // console.log(body)
+    const _id = request.headers.get("x-user-id")
+    if(!_id){
+      throw new CustomError("Unauthorized", 401)
+    }
     const data = await UserModel.findOne({
-      _id: new ObjectId("680f9202609d28de2614f266"),
+      _id: new ObjectId(_id),
     });
     if (!data) {
       throw new CustomError("User not found", 404);
     }
 
     return Response.json(data);
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof CustomError) {
       return Response.json(
         { message: error.message },
@@ -38,7 +40,7 @@ export async function DELETE(request: NextRequest){
     }
     await UserModel.delete(new ObjectId(_id))
     return Response.json({message: "Success delete user"})
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof CustomError) {
       return Response.json(
         { message: error.message },
