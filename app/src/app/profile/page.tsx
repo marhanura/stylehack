@@ -11,8 +11,7 @@ import ImageHistory from "../../../public/image4.webp";
 import ImageWishlist from "../../../public/image3.webp";
 import Link from "next/link";
 import Swal from "sweetalert2";
-import midtransClient from "../../midtrans-nodejs-client-master/index.js"
-import Script from "next/script";
+
 import { useState } from "react";
 
 
@@ -34,11 +33,7 @@ export default function ProfilePage() {
       // }
       const data = await resp.json()
       console.log(data.data.token)
-      setLink(data.data.redirect_url)
-      // window.snap.pay(data.data.redirect_url, {
-      //   // embedId: 'snap-container'
-      // })
-      
+      setLink(data.data.redirect_url)      
     
   }
   return (

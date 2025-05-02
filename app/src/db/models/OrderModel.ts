@@ -11,10 +11,20 @@ interface IOrder {
   updatedAt: string;
 }
 
+interface IOrderWithId extends IOrder{
+  _id: ObjectId
+}
+
 export default class OrderModel {
-  static async getCollection() {
+  static getCollection() {
     const db = getDB();
-    return db.collection("Orders");
+    return db.collection<IOrder>("Orders");
+  }
+
+  static async findOne(payload: Partial<IOrderWithId>){
+    const collection = this.getCollection()
+    const order = await collection.findOne(payload)
+    return order
   }
 
   static async createOrder(userId: ObjectId) {
@@ -45,7 +55,7 @@ export default class OrderModel {
         },
         body: JSON.stringify({
           transaction_details: {
-            order_id: `stylehack-${orderId}`,
+            order_id: `stylehackTEST-${orderId}`,
             gross_amount: 99000,
           },
           credit_card: {
@@ -72,12 +82,12 @@ export default class OrderModel {
     return "success change link"
   }
 
-  static async updateStatus(orderId: ObjectId) {
-    const collection = await this.getCollection();
-    await collection.updateOne(
-      { _id: orderId },
-      { $set: { status: "paid", paidAt: new Date(), updatedAt: new Date() } }
-    );
-    return "Order paid successfully";
-  }
+  // static async updateStatus(orderId: ObjectId) {
+  //   const collection = await this.getCollection();
+  //   await collection.updateOne(
+  //     { _id: orderId },
+  //     { $set: { status: "paid", paidAt: new Date(), updatedAt: new Date() } }
+  //   );
+  //   return "Order paid successfully";
+  // }
 }
