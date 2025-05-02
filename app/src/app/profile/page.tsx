@@ -13,10 +13,12 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function ProfilePage() {
   const [link, setLink] = useState("")
+  const router = useRouter()
   
   const handleBuy = async() => {
     console.log("belibro")
@@ -24,17 +26,15 @@ export default function ProfilePage() {
       const resp = await fetch(`http://localhost:3000/api/order`, {
         method: "POST"
       })
-      // if(!resp.ok){
-      //   Swal.fire({
-      //     title: "error",
-      //     icon: "error"
-      //   })
-      //   return
-      // }
-      const data = await resp.json()
-      console.log(data.data.token)
-      setLink(data.data.redirect_url)      
-    
+      if(!resp.ok){
+        Swal.fire({
+          title: "error",
+          icon: "error"
+        })
+        return
+      }
+      const data: {orderId: string} = await resp.json()
+      router.push(`/payment/${data.orderId}`)
   }
   return (
     <div className="h-screen">
