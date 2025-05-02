@@ -19,27 +19,31 @@ export async function POST(request: NextRequest) {
   try {
     if (
       body.transaction_status !== "settlement" &&
-      body.transaction_status !== "capture"
+      body.transaction_status !== "capture" && 
+      body.transaction_status !== "pending"
     ) {
       throw new CustomError("Status not right", 400);
     }
 
-    if(body.transaction_status === "pending"){
-        return Response.json({message: 'oke bang'}, {status: 200})
-    }
-
+    
     if (!body.order_id) {
-      throw new CustomError("orderId required", 400);
+        throw new CustomError("orderId required", 400);
     }
-
+    
     const order = await OrderModel.findOne({
-      _id: new ObjectId(body.order_id.split("-")[1]),
+        _id: new ObjectId(body.order_id.split("-")[1]),
     });
 
+    
     if (!order) {
-      throw new CustomError("order not found", 404);
+        throw new CustomError("order not found", 404);
     }
-
+    
+    if(body.transaction_status === "pending"){
+        await OrderModel.updateStatusPending(order._id)
+        return Response.json({message: 'oke bang'}, {status: 200})
+    }
+    
     if (!body.gross_amount) {
       throw new CustomError("Gross amount required", 400);
     }
@@ -83,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     await UserModel.addQuota(order.userId, user.quota + 10)
 
-    await OrderModel.updateStatus(order._id)
+    await OrderModel.updateStatusPaid(order._id)
 
     return Response.json({ message: "success", order }, { status: 200 });
   } catch (error) {
