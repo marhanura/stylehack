@@ -32,7 +32,7 @@ export default class OrderModel {
     const order: IOrder = {
       userId,
       amount: 99000,
-      status: "pending",
+      status: "waitingForPayment",
       redirectLink: "",
       paidAt: "",
       createdAt: new Date().toISOString(),
@@ -82,12 +82,21 @@ export default class OrderModel {
     return "success change link"
   }
 
-  static async updateStatus(orderId: ObjectId) {
+  static async updateStatusPaid(orderId: ObjectId) {
     const collection = this.getCollection();
     await collection.updateOne(
       { _id: orderId },
       { $set: { status: "paid", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
     );
     return "Order paid successfully";
+  }
+
+  static async updateStatusPending(orderId: ObjectId) {
+    const collection = this.getCollection();
+    await collection.updateOne(
+      { _id: orderId },
+      { $set: { status: "pending", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
+    );
+    return "Order pending successfully";
   }
 }
