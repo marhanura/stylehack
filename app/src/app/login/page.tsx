@@ -6,10 +6,13 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
+export interface IProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
 export async function handleLogin(formData: FormData): Promise<void> {
   const email = formData.get("email");
   const password = formData.get("password");
-  console.log("🐄 - handleLogin - input:", email, password);
 
   const res = await fetch(`http://localhost:3000/api/login`, {
     method: "POST",
@@ -31,7 +34,9 @@ export async function handleLogin(formData: FormData): Promise<void> {
   redirect("/");
 }
 
-export default async function LoginPage() {
+export default async function LoginPage(props: IProps) {
+  const { error } = (await props.searchParams) || {};
+
   return (
     <div className="flex flex-row h-screen bg-[#E7DFD1]">
       <form
@@ -42,6 +47,8 @@ export default async function LoginPage() {
         <h1 className="font-(family-name:--font-bodoni-moda) text-[28px]">
           Log In
         </h1>
+        {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
+
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
