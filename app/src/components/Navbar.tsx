@@ -34,13 +34,13 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Homepage</a>
+                <Link href="/recommendation">Homepage</Link>
               </li>
               <li>
-                <a>Portfolio</a>
+                <Link href="/profile">My Profile</Link>
               </li>
               <li>
-                <a>About</a>
+                <Link href="/about">About</Link>
               </li>
             </ul>
           </div>
