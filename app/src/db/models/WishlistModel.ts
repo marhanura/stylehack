@@ -102,4 +102,55 @@ export default class WishlistModel {
       .toArray();
     return wishlists;
   }
+
+  static async getLoginUserWishlistById(wishlistId: string, userId: string) {
+    const collection = this.getCollection();
+    const wishlists = await collection
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(wishlistId),
+            userId: new ObjectId(userId),
+          },
+        },
+        {
+          $lookup: {
+            from: "Recommendations",
+            localField: "recommendationId",
+            foreignField: "_id",
+            as: "recommendation",
+          },
+        },
+        {
+          $unwind: {
+            path: "$recommendation",
+          },
+        },
+        {
+          $lookup: {
+            from: "Recommendations",
+            localField: "recommendation._id",
+            foreignField: "recommendationId",
+            as: "extraRecommendation",
+          },
+        },
+        {
+          $unwind: {
+            path: "$extraRecommendation",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $project: {
+            recommendationId: 0,
+          },
+        },
+      ])
+      .toArray();
+
+    if (wishlists.length === 0) {
+      throw new CustomError("Wishlist not found", 404);
+    }
+    return wishlists[0];
+  }
 }
