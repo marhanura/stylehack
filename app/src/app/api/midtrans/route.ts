@@ -24,6 +24,10 @@ export async function POST(request: NextRequest) {
       throw new CustomError("Status not right", 400);
     }
 
+    if(body.transaction_status === "pending"){
+        return Response.json({message: 'oke bang'}, {status: 200})
+    }
+
     if (!body.order_id) {
       throw new CustomError("orderId required", 400);
     }
