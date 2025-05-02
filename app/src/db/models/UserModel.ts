@@ -72,4 +72,14 @@ export default class UserModel {
 
     return token;
   }
+
+  static async addQuota(_id: ObjectId, quota: number){
+    const collection = this.getCollection()
+
+    await collection.updateOne(
+      { _id: _id },
+      { $set: { quota: quota} }
+    );
+    
+  }
 }

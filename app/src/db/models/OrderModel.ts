@@ -28,7 +28,7 @@ export default class OrderModel {
   }
 
   static async createOrder(userId: ObjectId) {
-    const collection = await this.getCollection();
+    const collection = this.getCollection();
     const order: IOrder = {
       userId,
       amount: 99000,
@@ -74,7 +74,7 @@ export default class OrderModel {
   }
 
   static async setLink(link: string, orderId: ObjectId){
-    const collection = await this.getCollection();
+    const collection = this.getCollection();
     await collection.updateOne(
       {_id: orderId},
       {$set: {redirectLink: link}}
@@ -82,12 +82,12 @@ export default class OrderModel {
     return "success change link"
   }
 
-  // static async updateStatus(orderId: ObjectId) {
-  //   const collection = await this.getCollection();
-  //   await collection.updateOne(
-  //     { _id: orderId },
-  //     { $set: { status: "paid", paidAt: new Date(), updatedAt: new Date() } }
-  //   );
-  //   return "Order paid successfully";
-  // }
+  static async updateStatus(orderId: ObjectId) {
+    const collection = this.getCollection();
+    await collection.updateOne(
+      { _id: orderId },
+      { $set: { status: "paid", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
+    );
+    return "Order paid successfully";
+  }
 }
