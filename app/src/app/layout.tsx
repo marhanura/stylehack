@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Rubik, Bodoni_Moda, Bodoni_Moda_SC } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const rubik = Rubik({
   variable: "--font-rubik",
@@ -29,6 +30,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* <script
+          type="text/javascript"
+          src="https://app.stg.midtrans.com/snap/snap.js"
+          data-client-key="SB-Mid-client-xkteoPxf0fkBow1C"
+        ></script> */}
+        {/* <Script src="https://app.stg.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-xkteoPxf0fkBow1C"/> */}
+      </head>
       <body
         className={`${rubik.variable} ${bodoniModa.variable} ${bodoniModaSC.variable} antialiased`}
       >

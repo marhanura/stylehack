@@ -1,14 +1,50 @@
 "use client";
 import Navbar from "@/components/Navbar";
+
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
 import Image from "next/image";
 import ImageHistory from "../../../public/image4.webp";
 import ImageWishlist from "../../../public/image3.webp";
 import Link from "next/link";
+import Swal from "sweetalert2";
+import midtransClient from "../../midtrans-nodejs-client-master/index.js"
+import Script from "next/script";
+import { useState } from "react";
+
 
 export default function ProfilePage() {
+  const [link, setLink] = useState("")
+  
+  const handleBuy = async() => {
+    console.log("belibro")
+
+      const resp = await fetch(`http://localhost:3000/api/order`, {
+        method: "POST"
+      })
+      // if(!resp.ok){
+      //   Swal.fire({
+      //     title: "error",
+      //     icon: "error"
+      //   })
+      //   return
+      // }
+      const data = await resp.json()
+      console.log(data.data.token)
+      setLink(data.data.redirect_url)
+      // window.snap.pay(data.data.redirect_url, {
+      //   // embedId: 'snap-container'
+      // })
+      
+    
+  }
   return (
     <div className="h-screen">
       <Navbar />
+      {link && <iframe className="h-200" src={link} title="W3Schools Free Online Web Tutorials"></iframe>}
       <div className="m-10 bg-[#E7DFD1] p-10 h-100 flex flex-col">
         <h1 className="text-center mb-5">Profile</h1>
         <div className="flex flex-row justify-center items-center h-full">
@@ -24,11 +60,19 @@ export default function ProfilePage() {
                 max="100"
               ></progress>
               <span className="text-center ml-5">7 token</span>
+              <button className="btn"
+              onClick={handleBuy}
+              >
+                tombol bayar
+              </button>
+              <div id="snap-container"></div>
+             
+               
               <button
                 className="btn"
-                onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
-                }
+                // onClick={() =>
+                //   document.getElementById("my_modal_1").showModal()
+                // }
               >
                 Buy Token
               </button>
@@ -38,7 +82,7 @@ export default function ProfilePage() {
                   <p className="font-bold text-lg">Rp. 99.000</p>
                   <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
                   <div className="modal-action flex justify-between">
-                    <button className="btn">Buy Token</button>
+                    <button className="btn" >Buy Token</button>
                     <form method="dialog">
                       <button className="btn">Cancel</button>
                     </form>
