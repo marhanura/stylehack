@@ -49,4 +49,50 @@ export default class WishlistModel {
     const result = await collection.deleteOne({ _id: id });
     return result;
   }
+
+  static async getLoginUserWishlists(userId: string) {
+    const collection = this.getCollection();
+    const wishlists = await collection
+      .aggregate([
+        {
+          $match: {
+            userId: new ObjectId(userId),
+          },
+        },
+        {
+          $lookup: {
+            from: "Recommendations",
+            localField: "recommendationId",
+            foreignField: "_id",
+            as: "recommendation",
+          },
+        },
+        {
+          $unwind: {
+            path: "$recommendation",
+          },
+        },
+        {
+          $lookup: {
+            from: "Recommendations",
+            localField: "recommendation._id",
+            foreignField: "recommendationId",
+            as: "extraRecommendation",
+          },
+        },
+        {
+          $unwind: {
+            path: "$extraRecommendation",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $project: {
+            recommendationId: 0,
+          },
+        },
+      ])
+      .toArray();
+    return wishlists;
+  }
 }
