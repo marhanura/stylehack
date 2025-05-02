@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const message = await WishlistModel.createWishlist({
       userId: new ObjectId(_id),
-      recomendationId: new ObjectId(recommendationId),
+      recommendationId: new ObjectId(recommendationId),
     });
 
     return NextResponse.json({ message }, { status: 201 });
