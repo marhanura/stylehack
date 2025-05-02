@@ -27,7 +27,7 @@ export async function handleLogin(formData: FormData): Promise<void> {
   }
   const data = await res.json();
   const cookieStore = await cookies();
-  cookieStore.set("access_token", data.message);
+  cookieStore.set("access_token", data.token);
   redirect("/");
 }
 
