@@ -31,6 +31,13 @@ export default class WishlistModel {
       throw new CustomError("recommendation is not found", 404);
     }
 
+    if (payload.userId.toString() !== recommendation.userId.toString()) {
+      throw new CustomError(
+        "Not allowed to add another user's recommendation to wishlist",
+        403
+      );
+    }
+
     const wishlist = await collection.findOne({
       recommendationId: payload.recommendationId,
       userId: payload.userId,
