@@ -1,11 +1,17 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 
+export interface IExtraRecomendation {
+  userId: ObjectId;
+  prompt: IPrompt;
+  products: IProduct[];
+}
+
 export interface IRecomendation {
   userId: ObjectId;
+  prompt: IPrompt;
   products: IProduct[];
-  promptBy: IPrompt;
-  recommendationId: ObjectId;
+  extraRecommendation?: IExtraRecomendation;
 }
 
 interface IProduct {
@@ -31,7 +37,7 @@ export default class RecomendationModel {
       .aggregate([
         {
           $match: {
-            userId: new ObjectId("6810dbfd2e7d4851742daf01"),
+            userId: new ObjectId(userId),
           },
         },
         {
@@ -58,6 +64,7 @@ export default class RecomendationModel {
         {
           $project: {
             "extraRecommendation.recommendationId": 0,
+            "extraRecommendation._id": 0,
           },
         },
       ])
