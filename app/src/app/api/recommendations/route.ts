@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const recommendations =
       await RecomendationModel.getLoginUserRecommendations(userId);
 
-    return NextResponse.json({ recommendations });
+    return NextResponse.json(recommendations);
   } catch (err: unknown) {
     if (err instanceof ZodError) {
       const error = err.errors[0];
