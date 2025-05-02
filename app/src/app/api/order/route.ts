@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
     await OrderModel.setLink(data.redirect_url, insertedId)
 
-    return Response.json(data);
+    return Response.json({orderId: insertedId});
   } catch (error: unknown) {
     console.log("🐄 - POST - error:", error);
     if (error instanceof CustomError) {
