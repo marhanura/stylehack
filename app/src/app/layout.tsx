@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Rubik, Bodoni_Moda, Bodoni_Moda_SC } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const rubik = Rubik({
   variable: "--font-rubik",
@@ -32,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${rubik.variable} ${bodoniModa.variable} ${bodoniModaSC.variable} antialiased`}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
