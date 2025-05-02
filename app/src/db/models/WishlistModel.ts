@@ -1,10 +1,11 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 import CustomError from "../helpers/CustomError";
+import RecomendationModel from "./RecomendationModel";
 
 export interface IWishlist {
   userId: ObjectId;
-  recomendationId: ObjectId;
+  recommendationId: ObjectId;
 }
 
 export default class WishlistModel {
@@ -21,9 +22,17 @@ export default class WishlistModel {
 
   static async createWishlist(payload: IWishlist): Promise<string> {
     const collection = this.getCollection();
+    const recommendationCollection = RecomendationModel.getCollection();
+
+    const recommendation = await recommendationCollection.findOne({
+      _id: payload.recommendationId,
+    });
+    if (!recommendation) {
+      throw new CustomError("recommendation is not found", 404);
+    }
 
     const wishlist = await collection.findOne({
-      recomendationId: payload.recomendationId,
+      recommendationId: payload.recommendationId,
       userId: payload.userId,
     });
     if (wishlist) {
