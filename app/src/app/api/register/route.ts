@@ -8,6 +8,7 @@ interface IUser {
   email: string;
   password: string;
   gender: string;
+  ageRange: string;
 }
 
 const newUserSchema = z.object({
@@ -25,13 +26,19 @@ const newUserSchema = z.object({
     .refine((val) => val === "male" || val === "female", {
       message: "Gender must be either male or female",
     }),
+  ageRange: z
+    .string()
+    .min(1, { message: "Age range is required" })
+    .refine((val) => val === "child" || val === "teenager" || val === "adult", {
+      message: "Age range must be either child, teenager or adult",
+    }),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const payload: IUser = await req.json();
     newUserSchema.parse(payload);
-    const { name, email, password, gender } = payload;
+    const { name, email, password, gender, ageRange } = payload;
 
     const message = await UserModel.register({
       name,
@@ -39,7 +46,7 @@ export async function POST(req: NextRequest) {
       password,
       gender,
       quota: 10,
-      isPremium: false,
+      ageRange,
     });
 
     return NextResponse.json({ message });
