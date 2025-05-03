@@ -27,6 +27,24 @@ export default class OrderModel {
     return order
   }
 
+  static async find(userId: ObjectId){
+    const collection = this.getCollection()
+
+    const orders = await collection.aggregate([
+      {
+        '$match': {
+          'userId': userId
+        }
+      }, {
+        '$sort': {
+          'createdAt': -1
+        }
+      }
+    ]).toArray()
+
+    return orders
+  }
+
   static async createOrder(userId: ObjectId) {
     const collection = this.getCollection();
     const order: IOrder = {
