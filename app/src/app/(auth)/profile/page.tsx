@@ -14,26 +14,24 @@ import { IDetail } from "../lookbook/page";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
+  const router = useRouter();
 
-    const router = useRouter()
-    
-    const handleBuy = async() => {
-      console.log("belibro")
-  
-        const resp = await fetch(`http://localhost:3000/api/order`, {
-          method: "POST"
-        })
-        if(!resp.ok){
-          Swal.fire({
-            title: "error",
-            icon: "error"
-          })
-          return
-        }
-        const data: {orderId: string} = await resp.json()
-        router.push(`/payment/${data.orderId}`)
+  const handleBuy = async () => {
+    console.log("belibro");
+
+    const resp = await fetch(`http://localhost:3000/api/order`, {
+      method: "POST",
+    });
+    if (!resp.ok) {
+      Swal.fire({
+        title: "error",
+        icon: "error",
+      });
+      return;
     }
-
+    const data: { orderId: string } = await resp.json();
+    router.push(`/payment/${data.orderId}`);
+  };
 
   const [user, setUser] = useState<IUser>({
     name: "",
@@ -41,7 +39,7 @@ export default function ProfilePage() {
     password: "",
     gender: "",
     quota: 0,
-    isPremium: false,
+    ageRange: "",
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
   const [wishlist, setWishlist] = useState<IDetail[]>([]);
@@ -147,7 +145,9 @@ export default function ProfilePage() {
                 <p className="font-bold text-lg">Rp. 99.000</p>
                 <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
                 <div className="modal-action flex justify-between">
-                  <button className="btn" onClick={handleBuy}>Buy Token</button>
+                  <button className="btn" onClick={handleBuy}>
+                    Buy Token
+                  </button>
                   <form method="dialog">
                     <button className="btn">Cancel</button>
                   </form>
