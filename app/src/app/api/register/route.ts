@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       ageRange,
     });
 
-    return NextResponse.json({ message });
+    return NextResponse.json({ message }, { status: 201 });
   } catch (err: unknown) {
     if (err instanceof ZodError) {
       const error = err.errors[0];
