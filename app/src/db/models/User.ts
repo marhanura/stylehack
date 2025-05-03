@@ -1,33 +1,38 @@
 
-import {
-  Model,
-  IMongoloquentSchema,
-  IMongoloquentTimestamps,
-} from "mongoloquent";
+// import {
+//   Model,
+//   IMongoloquentSchema,
+//   IMongoloquentTimestamps,
+// } from "mongoloquent";
+// import Wishlish from "./WishlistModel";
 
 
 
-export interface IUser extends IMongoloquentSchema, IMongoloquentTimestamps {
-  name: string;
-  email: string;
-  password: string;
-  gender: string;
-  quota: number;
-  isPremium: boolean;
-}
+// export interface IUser extends IMongoloquentSchema, IMongoloquentTimestamps {
+//   name: string;
+//   email: string;
+//   password: string;
+//   gender: string;
+//   quota: number;
+//   isPremium: boolean;
+// }
 
-export default class User extends Model<IUser> {
-  /**
-   * The attributes of the model.
-   *
-   * @var IUser
-   */
-  static $schema: IUser;
+// export default class User extends Model<IUser> {
+//   /**
+//    * The attributes of the model.
+//    *
+//    * @var IUser
+//    */
+//   static $schema: IUser;
 
-  /**
-   * The collection associated with the model.
-   *
-   * @var string
-   */
-  static $collection: string = "Users";
-}
+//   /**
+//    * The collection associated with the model.
+//    *
+//    * @var string
+//    */
+//   static $collection: string = "Users";
+
+//   Wishlist() {
+//     return this.hasMany(Wishlish)
+//   }
+// }

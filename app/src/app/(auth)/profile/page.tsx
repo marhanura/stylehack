@@ -9,10 +9,32 @@ import Image3 from "@/../public/avatar3.png";
 import { removeToken } from "../../../../actions";
 import Swal from "sweetalert2";
 import { IUser } from "@/db/models/UserModel";
-import { IWishlistDetail } from "../wishlist/page";
+// import { IWishlistDetail } from "../wishlist/page";
 import { IDetail } from "../lookbook/page";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
+
+    const router = useRouter()
+    
+    const handleBuy = async() => {
+      console.log("belibro")
+  
+        const resp = await fetch(`http://localhost:3000/api/order`, {
+          method: "POST"
+        })
+        if(!resp.ok){
+          Swal.fire({
+            title: "error",
+            icon: "error"
+          })
+          return
+        }
+        const data: {orderId: string} = await resp.json()
+        router.push(`/payment/${data.orderId}`)
+    }
+
+
   const [user, setUser] = useState<IUser>({
     name: "",
     email: "",
@@ -22,7 +44,7 @@ export default function ProfilePage() {
     isPremium: false,
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
-  const [wishlist, setWishlist] = useState<IWishlistDetail[]>([]);
+  const [wishlist, setWishlist] = useState<IDetail[]>([]);
   const avatars = [Image1, Image2, Image3];
   const randomAvatar = useState(
     () => avatars[Math.floor(Math.random() * avatars.length)]
@@ -125,7 +147,7 @@ export default function ProfilePage() {
                 <p className="font-bold text-lg">Rp. 99.000</p>
                 <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
                 <div className="modal-action flex justify-between">
-                  <button className="btn">Buy Token</button>
+                  <button className="btn" onClick={handleBuy}>Buy Token</button>
                   <form method="dialog">
                     <button className="btn">Cancel</button>
                   </form>
