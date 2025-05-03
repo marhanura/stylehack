@@ -4,6 +4,7 @@ import Logo from "../../../public/logotext.png";
 import RegisterImage from "../../../public/register.webp";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { IProps } from "../login/page";
 
 export async function handleRegister(formData: FormData): Promise<void> {
   const name = formData.get("name");
@@ -30,7 +31,9 @@ export async function handleRegister(formData: FormData): Promise<void> {
   redirect("/login");
 }
 
-export default async function RegisterPage() {
+export default async function RegisterPage(props: IProps) {
+  const { error } = (await props.searchParams) || {};
+
   return (
     <div className="flex flex-row h-screen bg-[#E7DFD1]">
       <form
@@ -41,6 +44,8 @@ export default async function RegisterPage() {
         <h1 className="font-(family-name:--font-bodoni-moda) text-[28px]">
           Register
         </h1>
+        {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
+
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
