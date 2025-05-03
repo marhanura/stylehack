@@ -43,3 +43,26 @@ export async function DELETE(req: NextRequest, params: IParams) {
     return Response.json({ message: "ISE" }, { status: 500 });
   }
 }
+
+export async function GET(req: NextRequest, params: IParams) {
+  try {
+    const { _id } = await params.params;
+    if (!_id) {
+      throw new CustomError("wishlistId is required", 400);
+    }
+
+    const userId = req.headers.get("x-user-id");
+    if (!userId) {
+      throw new CustomError("Unauthorized", 401);
+    }
+
+    const wishlist = await WishlistModel.getLoginUserWishlistById(_id, userId);
+
+    return Response.json(wishlist);
+  } catch (err: unknown) {
+    if (err instanceof CustomError) {
+      return Response.json({ message: err.message }, { status: err.status });
+    }
+    return Response.json({ message: "Internal server error" }, { status: 500 });
+  }
+}

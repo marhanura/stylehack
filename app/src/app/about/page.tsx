@@ -1,11 +1,12 @@
-import Navbar from "@/components/Navbar";
 import Image from "next/image";
 
 export default function AboutPage() {
   return (
-    <div className="h-screen">
-      <Navbar />
-      <div className="m-10 p-10 h-100 flex flex-row gap-10 items-center justify-center">
+    <div className="h-screen pt-25 ">
+      <h2 className="font-bold text-xl text-center my-5">
+        Team Andrew & The Backbone
+      </h2>
+      <div className="px-10 h-100 flex flex-row gap-10 items-center justify-center">
         <div className="card bg-[#E7DFD1] shadow-sm">
           <figure>
             <Image

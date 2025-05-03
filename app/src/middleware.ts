@@ -10,7 +10,8 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith("/api")) {
       if (
         !request.nextUrl.pathname.startsWith("/api/login") &&
-        !request.nextUrl.pathname.startsWith("/api/register")
+        !request.nextUrl.pathname.startsWith("/api/register") && 
+        !request.nextUrl.pathname.startsWith("/api/midtrans")
       ) {
         const cookieStore = await cookies();
         const token = cookieStore.get("access_token");
