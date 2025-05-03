@@ -6,6 +6,8 @@ import RecomendationModel from "./RecomendationModel";
 export interface IWishlist {
   userId: ObjectId;
   recommendationId: ObjectId;
+  createdAt: string;
+  updateAt: string;
 }
 
 export default class WishlistModel {
@@ -57,50 +59,85 @@ export default class WishlistModel {
     return result;
   }
 
-  static async getLoginUserWishlists(userId: string) {
+  static async getLoginUserWishlists(userId: string, page: string | null) {
     const collection = this.getCollection();
-    const wishlists = await collection
-      .aggregate([
-        {
-          $match: {
-            userId: new ObjectId(userId),
-          },
+
+    const currentPage = page ? Number(page) - 1 : 0;
+    const pageSize = 6;
+
+    const pipeline = [
+      {
+        $match: {
+          userId: new ObjectId(userId),
         },
-        {
-          $lookup: {
-            from: "Recommendations",
-            localField: "recommendationId",
-            foreignField: "_id",
-            as: "recommendation",
-          },
+      },
+      {
+        $lookup: {
+          from: "Recommendations",
+          localField: "recommendationId",
+          foreignField: "_id",
+          as: "recommendation",
         },
-        {
-          $unwind: {
-            path: "$recommendation",
-          },
+      },
+      {
+        $unwind: {
+          path: "$recommendation",
+          preserveNullAndEmptyArrays: true,
         },
-        {
-          $lookup: {
-            from: "Recommendations",
-            localField: "recommendation._id",
-            foreignField: "recommendationId",
-            as: "extraRecommendation",
-          },
+      },
+      {
+        $lookup: {
+          from: "Recommendations",
+          localField: "recommendation._id",
+          foreignField: "recommendationId",
+          as: "extraRecommendation",
         },
-        {
-          $unwind: {
-            path: "$extraRecommendation",
-            preserveNullAndEmptyArrays: true,
-          },
+      },
+      {
+        $unwind: {
+          path: "$extraRecommendation",
+          preserveNullAndEmptyArrays: true,
         },
-        {
-          $project: {
-            recommendationId: 0,
-          },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          root: { $first: "$$ROOT" },
         },
-      ])
-      .toArray();
-    return wishlists;
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$root",
+        },
+      },
+      { $sort: { _id: -1 } },
+      {
+        $skip: currentPage * pageSize,
+      },
+      {
+        $limit: pageSize,
+      },
+    ];
+    const countPipeline = [
+      {
+        $match: {
+          userId: new ObjectId(userId),
+        },
+      },
+      {
+        $count: "count",
+      },
+    ];
+
+    const [data, totalResult] = await Promise.all([
+      collection.aggregate(pipeline).toArray(),
+      collection.aggregate(countPipeline).toArray(),
+    ]);
+
+    const total = totalResult[0]?.count || 0;
+    const totalPage = Math.ceil(total / pageSize);
+
+    return { data, currentPage: currentPage + 1, totalPage, total };
   }
 
   static async getLoginUserWishlistById(wishlistId: string, userId: string) {
