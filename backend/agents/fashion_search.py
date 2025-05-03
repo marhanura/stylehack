@@ -4,6 +4,7 @@ from langchain_groq import ChatGroq
 from langchain.tools import Tool
 from dotenv import load_dotenv
 import os
+import json
 
 class FashionSearchAgent:
     def __init__(self):
@@ -76,6 +77,13 @@ class FashionSearchAgent:
         # Create the agent
         self.agent_executor = create_react_agent(self.llm, [self.search_tool])
 
-    def search(self, user_input: str) -> str:
+
+    def search(self, user_input: str) -> dict:
         response = self.agent_executor.invoke({"messages": user_input})
-        return response['messages'][-1].content
+        result_string = response['messages'][-1].content
+        try:
+            return json.loads(result_string)  
+        except json.JSONDecodeError:
+            print("Gagal decode JSON:")
+            print(result_string)
+            return {"error": "Invalid JSON format from agent"}
