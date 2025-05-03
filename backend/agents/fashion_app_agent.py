@@ -7,10 +7,11 @@ class FashionAppAgent:
         self.outfit_describer = OutfitDescriber()
 
     def check_input_image_or_event(self, user_input):
-        if user_input.lower().endswith(('.jpg', '.jpeg', '.png')):
+        if user_input.startswith("http") and ("cloudinary" in user_input or user_input.endswith(('.jpg', '.jpeg', '.png'))):
             return "image"
         else:
             return "event"
+
 
     def main(self, user_input):
         input_type = self.check_input_image_or_event(user_input)

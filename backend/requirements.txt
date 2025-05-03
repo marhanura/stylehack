@@ -1,9 +1,9 @@
 fastapi
 uvicorn[standard]
 python-dotenv
-cloudinary
 groq
 langchain
 langchain-community
 langchain-groq
 tavily-python
+langgraph

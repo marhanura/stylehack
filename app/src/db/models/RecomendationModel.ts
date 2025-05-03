@@ -14,13 +14,13 @@ export interface IRecomendation {
   extraRecommendation?: IExtraRecomendation;
 }
 
-interface IProduct {
+export interface IProduct {
   category: string;
   name: string;
   links: string[];
 }
 
-interface IPrompt {
+export interface IPrompt {
   type: string;
   input: string;
 }

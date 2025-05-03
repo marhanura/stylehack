@@ -12,7 +12,7 @@ class OutfitDescriber:
         self.top_p = top_p
         self.seed = seed
 
-    def describe_outfit(self, image_path: str) -> str:
+    def describe_outfit(self, image_url: str) -> str:
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -30,7 +30,7 @@ class OutfitDescriber:
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": image_path,
+                                "url": image_url,
                             }
                         }
                     ]
