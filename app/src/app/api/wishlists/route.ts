@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
     const message = await WishlistModel.createWishlist({
       userId: new ObjectId(_id),
       recommendationId: new ObjectId(recommendationId),
+      createdAt: new Date().toISOString(),
+      updateAt: new Date().toISOString(),
     });
 
     return NextResponse.json({ message }, { status: 201 });
@@ -47,7 +49,10 @@ export async function GET(req: NextRequest) {
       throw new CustomError("Unauthorized", 401);
     }
 
-    const wishlists = await WishlistModel.getLoginUserWishlists(userId);
+    const searchParams = req.nextUrl.searchParams;
+    const page = searchParams.get("page");
+
+    const wishlists = await WishlistModel.getLoginUserWishlists(userId, page);
 
     return NextResponse.json(wishlists);
   } catch (err: unknown) {
