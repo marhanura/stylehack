@@ -12,6 +12,6 @@ class RecommendationRequest(BaseModel):
 async def recommend_outfit(request: RecommendationRequest):
     try:
         result = agent.main(request.input)
-        return result
+        return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
