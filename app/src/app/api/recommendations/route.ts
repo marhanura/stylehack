@@ -10,8 +10,11 @@ export async function GET(req: NextRequest) {
       throw new CustomError("Unauthorized", 401);
     }
 
+    const searchParams = req.nextUrl.searchParams;
+    const page = searchParams.get("page");
+
     const recommendations =
-      await RecomendationModel.getLoginUserRecommendations(userId);
+      await RecomendationModel.getLoginUserRecommendations(userId, page);
 
     return NextResponse.json(recommendations);
   } catch (err: unknown) {
