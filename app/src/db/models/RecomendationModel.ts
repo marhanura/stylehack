@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
+import CustomError from "../helpers/CustomError";
 
 export interface IExtraRecomendation {
   userId: ObjectId;
@@ -96,5 +97,54 @@ export default class RecomendationModel {
       totalPage,
       total,
     };
+  }
+
+  static async getLoginUserRecommendationById(
+    recommendationId: string,
+    userId: string
+  ) {
+    const collection = this.getCollection();
+
+    const pipeline = [
+      {
+        $match: {
+          _id: new ObjectId(recommendationId),
+          userId: new ObjectId(userId),
+        },
+      },
+      {
+        $lookup: {
+          from: "Recommendations",
+          localField: "_id",
+          foreignField: "recommendationId",
+          as: "extraRecommendation",
+        },
+      },
+      {
+        $unwind: {
+          path: "$extraRecommendation",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          recommendationId: {
+            $exists: false,
+          },
+        },
+      },
+      {
+        $project: {
+          "extraRecommendation.recommendationId": 0,
+          "extraRecommendation._id": 0,
+        },
+      },
+    ];
+
+    const recommendations = await collection.aggregate(pipeline).toArray();
+    if (recommendations.length === 0) {
+      throw new CustomError("Recommendation not found", 404);
+    }
+    return recommendations[0];
   }
 }
