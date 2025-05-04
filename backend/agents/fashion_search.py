@@ -3,6 +3,8 @@ from langgraph.prebuilt import create_react_agent
 from langchain_groq import ChatGroq
 from langchain.tools import Tool
 from dotenv import load_dotenv
+from langchain.output_parsers import PydanticOutputParser
+from .output_schema import RecommendationOutput
 import os
 import json
 
@@ -10,6 +12,7 @@ class FashionSearchAgent:
     def __init__(self):
         # Load environment variables
         load_dotenv()
+        self.parser = PydanticOutputParser(pydantic_object=RecommendationOutput)
         self.prompt_template = """This tool only used for searching product where the input is event or occasion. Your task is to search for real, available product links for fashion items based on the user's event or occasion input.
 
             IMPORTANT SEARCH INSTRUCTIONS:
@@ -23,7 +26,7 @@ class FashionSearchAgent:
             8. Use the following categories: "Top", "Bottom", "Outer", "Footwear", "Accessories", "Bag", "Dress", "Jumpsuit", "Swimwear", "Lingerie", "Sleepwear", "Activewear".
             9. Adjust to gender in request input
 
-            Generate a JSON object following this exact structure:
+            Generate output  STRICTLY in  JSON object following this exact structure:
             {
                 "products": [
                     {
@@ -46,6 +49,7 @@ class FashionSearchAgent:
             }
 
             DO NOT MAKE UP LINKS. Only use links that point directly to specific product pages, never to search results pages.
+            DO NOT output any additional text.
             """
         # Initialize the LLM
         self.llm = ChatGroq(
@@ -79,11 +83,16 @@ class FashionSearchAgent:
 
 
     def search(self, user_input: str) -> dict:
+        # panggil agent
         response = self.agent_executor.invoke({"messages": user_input})
-        result_string = response['messages'][-1].content
+        raw = response["messages"][-1].content
+        
+        # parse pakai parser
         try:
-            return json.loads(result_string)  
-        except json.JSONDecodeError:
-            print("Gagal decode JSON:")
-            print(result_string)
-            return {"error": "Invalid JSON format from agent"}
+            parsed: RecommendationOutput = self.parser.parse(raw)
+            # kembalikan sebagai dict
+            return parsed.dict()
+        except Exception as e:
+            # debug jika gagal
+            print("Parsing error:", e, "\nRaw output:", raw)
+            return {"error": "Failed to parse agent output"}
