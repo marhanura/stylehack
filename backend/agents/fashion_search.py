@@ -3,16 +3,14 @@ from langgraph.prebuilt import create_react_agent
 from langchain_groq import ChatGroq
 from langchain.tools import Tool
 from dotenv import load_dotenv
-from langchain.output_parsers import PydanticOutputParser
-from .output_schema import RecommendationOutput
 import os
 import json
+import re
 
 class FashionSearchAgent:
     def __init__(self):
         # Load environment variables
         load_dotenv()
-        self.parser = PydanticOutputParser(pydantic_object=RecommendationOutput)
         self.prompt_template = """This tool only used for searching product where the input is event or occasion. Your task is to search for real, available product links for fashion items based on the user's event or occasion input.
 
             IMPORTANT SEARCH INSTRUCTIONS:
@@ -25,8 +23,12 @@ class FashionSearchAgent:
             7. Only use links that point directly to specific product pages, never to search results pages.
             8. Use the following categories: "Top", "Bottom", "Outer", "Footwear", "Accessories", "Bag", "Dress", "Jumpsuit", "Swimwear", "Lingerie", "Sleepwear", "Activewear".
             9. Adjust to gender in request input
+            
+            IMPORTANT OUTPUT FORMATTING:
+            - Return ONLY the JSON object, without any additional text, explanation, or markdown formatting
+            - Do not include code blocks, backticks, or any other non-JSON content
 
-            Generate output  STRICTLY in  JSON object following this exact structure:
+            Generate a JSON object following this exact structure:
             {
                 "products": [
                     {
@@ -49,50 +51,65 @@ class FashionSearchAgent:
             }
 
             DO NOT MAKE UP LINKS. Only use links that point directly to specific product pages, never to search results pages.
-            DO NOT output any additional text.
+            Give me a few of items that match with the event or occasion or the user input.
             """
         # Initialize the LLM
         self.llm = ChatGroq(
-            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            model="meta-llama/llama-4-maverick-17b-128e-instruct",
             temperature=0,
-            seed=42,
-            top_p=0.002
+            seed=100,
+            top_p=0.0000000002
         )
 
-        # Initialize the search tool
-        self.search_tool = Tool(
-            name="Product Search based on event",
-            func=TavilySearchResults(
+        # Create a wrapper function to ensure search results are properly formatted as strings
+        def search_and_format(query):
+            tavily = TavilySearchResults(
                 api_key=os.getenv("TAVILY_API_KEY"),
-                max_results=10,
+                max_results=25,
                 search_depth='basic',
                 topic="fashion",
-                include_domains=["https://shop-id.tokopedia.com/"],
+                include_domains=["shop-id.tokopedia.com"],
                 exclude_domains=[
                     "https://www.tokopedia.com/find/",
                     "https://shopee.co.id/search?keyword="
                 ]
-            ),
-            description= self.prompt_template,
-            max_retries=5,
-            verbose=True,
+            )
+            results = tavily.invoke(query)
+            # Ensure the results are returned as a properly formatted string
+            if isinstance(results, list):
+                return json.dumps(results)
+            return str(results)
+
+        # Initialize the search tool with the wrapper function
+        self.search_tool = Tool(
+            name="Product Search based on event",
+            func=search_and_format,
+            description=self.prompt_template,
+            max_retries=10,
         )
 
         # Create the agent
         self.agent_executor = create_react_agent(self.llm, [self.search_tool])
 
-
-    def search(self, user_input: str) -> dict:
-        # panggil agent
-        response = self.agent_executor.invoke({"messages": user_input})
-        raw = response["messages"][-1].content
-        
-        # parse pakai parser
+    def search(self, user_input):
         try:
-            parsed: RecommendationOutput = self.parser.parse(raw)
-            # kembalikan sebagai dict
-            return parsed.dict()
+            response = self.agent_executor.invoke({"messages": user_input})
+            content = response['messages'][-1].content
+            print(content)
+            try:
+                # Try to extract JSON from code blocks first
+                json_match = re.search(r'```(?:json)?\s*(.*?)\s*```', content, re.DOTALL)
+                if json_match:
+                    content = json_match.group(1)
+
+                # Parse the JSON to validate it
+                parsed_json = json.loads(content)
+                # Return formatted JSON string
+                return json.dumps(parsed_json, ensure_ascii=False)
+            except json.JSONDecodeError:
+                # Return a valid error JSON if parsing fails
+                return json.dumps({"error": "Could not extract valid JSON from response"})
+
         except Exception as e:
-            # debug jika gagal
-            print("Parsing error:", e, "\nRaw output:", raw)
-            return {"error": "Failed to parse agent output"}
+            # Handle any other exceptions during agent execution
+            return json.dumps({"error": f"Agent execution error: {str(e)}"})
