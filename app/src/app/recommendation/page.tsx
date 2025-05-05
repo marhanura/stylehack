@@ -3,6 +3,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import Image1 from "@/../public/image1.webp";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { generateRecommendation } from "./action";
 
 type Product = {
   category: string;
@@ -24,91 +25,46 @@ export default function RecommendationPage() {
   const recByImage = async (file: File) => {
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const up = await fetch("/api/recommendations/using-image", {
-        method: "POST",
-        body: formData,
-      });
-      const { url } = await up.json();
-      if (!up.ok) throw new Error("Upload failed");
-
-      const rec = await fetch("/api/recommendations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "image", input: url }),
-      });
-      const recJson = await rec.json();
-      if (!rec.ok) throw new Error(recJson.message || "Recommend failed");
-
-      console.log("AI result:", recJson);
-      // if(recJson === undefined){
-      //   throw new Error("Failed getting the recomendation from ai")
-      // }
-      setResult(recJson.products);
+      const form = new FormData();
+      form.append("type", "image");
+      form.append("input", "");
+      form.append("file", file);
+      const products = await generateRecommendation(form);
+      setResult(products);
     } catch (e: any) {
-      alert(e.message);
+      console.log(e);
+      Swal.fire({
+        title: "Error",
+        text: e.message,
+        icon: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const recByDestination = async () => {
-    if (!destination || !style) {
-      alert("Please select destination and style");
-      return;
-    }
-    setLoading(true);
-    try {
-      const rec = await fetch("/api/recommendations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "destination",
-          input: `${destination} ${style}`,
-        }),
-      });
-      const recJson = await rec.json();
-      if (!rec.ok) throw new Error(recJson.message);
-      setResult(recJson.products);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
+    const form = new FormData();
+    form.append("type", "destination");
+    form.append("input", `${destination} ${style}`);
+    const products = await generateRecommendation(form);
+    setResult(products);
   };
 
   const recByFreeText = async () => {
-    if (!freeText.trim()) {
-      alert("Please describe your style");
-      return;
-    }
-    setLoading(true);
-    try {
-      const rec = await fetch("/api/recommendations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "free-text",
-          input: freeText,
-        }),
-      });
-      const recJson = await rec.json();
-      if (!rec.ok) throw new Error(recJson.message);
-      setResult(recJson.products);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
+    const form = new FormData();
+    form.append("type", "free-text");
+    form.append("input", freeText);
+    const products = await generateRecommendation(form);
+    setResult(products);
   };
 
-  if(result === undefined){
+  if (result === undefined) {
     Swal.fire({
       title: "no recomendations",
-      icon: "error"
-    })
-    return 
+      icon: "error",
+    });
+    return;
   }
   const renderTabContent = () => {
     switch (activeTab) {
@@ -171,7 +127,7 @@ export default function RecommendationPage() {
       case "destination":
         return (
           <div className="bg-[#E7DFD1] p-10 h-100 flex flex-col w-full">
-            {!result  ? (
+            {!result ? (
               <div>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">
