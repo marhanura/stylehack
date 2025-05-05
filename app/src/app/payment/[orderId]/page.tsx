@@ -24,12 +24,10 @@ export default function PaymentPage({
   }, []);
 
   return (
-    <>
-      <h1>bayyar woe</h1>
-      <h1>{link}</h1>
+    <div className="h-screen pt-21">
       <div className="flex justify-center py-5">
         {link && <iframe className="h-150 w-100" src={link} title=""></iframe>}
       </div>
-    </>
+    </div>
   );
 }

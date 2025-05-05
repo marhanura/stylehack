@@ -4,16 +4,21 @@ import UserModel from "@/db/models/UserModel";
 import { ObjectId } from "mongodb";
 import { NextRequest } from "next/server";
 
+
 export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = request.nextUrl;
+    const pageNumber = parseInt(searchParams.get("p") || "1", 10);
+    // console.log(pageNumber, "<<<<<<<<<<<<<  ")
     const _id = request.headers.get("x-user-id");
     if (!_id) {
       throw new CustomError("Unauthorized", 401);
     }
 
-    const order = await OrderModel.find(new ObjectId(_id));
+    const order = await OrderModel.find(new ObjectId(_id), pageNumber === 1 ? 0 : (pageNumber - 1) * 10);
     return Response.json(order);
   } catch (error) {
+    // console.log(error)
     if (error instanceof CustomError) {
       return Response.json(
         { message: error.message },
@@ -37,24 +42,6 @@ export async function POST(request: NextRequest) {
       throw new CustomError("User not found", 404);
     }
 
-    // let snap = new midtransClient.Snap({
-    //   isProduction: false,
-    //   serverKey,
-    //   clientKey
-    // });
-
-    // let parameter = {
-    //   transaction_details: {
-    //     order_id: result.insertedId,
-    //     gross_amount: 99000,
-    //   },
-    //   credit_card: {
-    //     secure: true,
-    //   },
-
-    // };
-
-    // const midtransToken = await snap.createTransaction(parameter);
     const data = await OrderModel.createMidtransTransaction(
       insertedId.toString(),
       user.name,
