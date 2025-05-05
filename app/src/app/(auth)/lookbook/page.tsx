@@ -18,6 +18,7 @@ export interface IDetail {
 
 export default function LookbookPage() {
   const [recommendations, setRecommendations] = useState<IDetail[]>([]);
+  console.log("🐄 - LookbookPage - recommendations:", recommendations);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -53,7 +54,7 @@ export default function LookbookPage() {
     <div className="h-full bg-[#E7DFD1] pt-25 px-10 h-full flex flex-col">
       <h1 className="text-center mb-5">My Lookbook</h1>
       <div className="grid grid-cols-3 gap-10">
-        {recommendations.map((recommendation) => (
+        {recommendations?.map((recommendation) => (
           <RecsCard key={recommendation._id.toString()} data={recommendation} />
         ))}
       </div>

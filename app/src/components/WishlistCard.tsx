@@ -46,35 +46,34 @@ export default function WishlistCard(props: IStyleCard) {
   };
 
   return (
-    <div className="card bg-base-100 h-100 w-full rounded-none">
-      {/* <figure>
-        <Image
-          src={Thumbnail}
-          alt="Shoes"
-          width={400}
-          height={300}
-          className="object-cover"
-        />
-      </figure> */}
-      <div className="card-body">
-        <div className="badge badge-secondary">
-          {wishlist.recommendation.prompt.type}
-        </div>
-        <p className="card-title">{wishlist.recommendation.prompt.input}</p>
-        {wishlist.recommendation.products.map((product) => (
-          <div key={product.category}>
-            <p>
-              {product.category}: {product.name}
-            </p>
-            <Link href={product.links[0]}>Product 1</Link> /
-            <Link href={product.links[1]}>Product 2</Link>
+    <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
+      <div className="flex flex-col justify-start h-full gap-2 my-3">
+        <div className="h-[400px] overflow-hidden">
+          <div className="badge badge-secondary">
+            {wishlist.recommendation.prompt.type}
           </div>
-        ))}
-        {/* <div className="flex flex-row gap-3 my-3 justify-center">
-          <Image src={Thumbnail} width={50} height={50} alt="Anak anak" />
-          <Image src={Thumbnail} width={50} height={50} alt="Anak anak" />
-          <Image src={Thumbnail} width={50} height={50} alt="Anak anak" />
-        </div> */}
+          {wishlist.recommendation.prompt.input.includes("cloudinary") ? (
+            <Image
+              src={wishlist.recommendation.prompt.input}
+              width={200}
+              height={300}
+              alt={wishlist.recommendation.prompt.type}
+              className="object-cover my-2"
+              style={{ width: "200px", height: "300px" }}
+            />
+          ) : (
+            <p className="my-2">{wishlist.recommendation.prompt.input}</p>
+          )}
+          {wishlist.recommendation.products.map((product, index) => (
+            <div key={index}>
+              <p>
+                {product.category}: {product.name}
+              </p>
+              <Link href={product.links[0]}>Product 1</Link> /
+              {/* <Link href={product.links[1]}>Product 2</Link> */}
+            </div>
+          ))}
+        </div>
         <div className="card-actions justify-end">
           <Link href={`/wishlist/${wishlist._id}`} className="btn">
             See Detail

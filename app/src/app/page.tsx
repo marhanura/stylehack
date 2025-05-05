@@ -43,11 +43,13 @@ export default function Home() {
         <div className="flex flex-row items-center justify-around">
           <div className="flex flex-col items-center">
             <h1 className="text-center my-3 text-sm">Based on inspired look</h1>
-            <input
-              type="search"
-              placeholder="Barbie look"
-              className="rounded-none border-b-1 border-stone-600 w-full my-5 typewriter"
-            />
+            <span className="border-b-1 border-stone-600 my-5 w-full">
+              <input
+                type="search"
+                placeholder="Barbie look"
+                className="rounded-none my-1 typewriter"
+              />
+            </span>
             <Image
               src={Image2}
               width={250}
@@ -63,11 +65,13 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center">
             <h1 className="text-center my-3 text-sm">Based on destination</h1>
-            <input
-              type="search"
-              placeholder="I'm going to an art exhibition"
-              className="rounded-none border-b-1 border-stone-600 w-full my-5 typewriter"
-            />
+            <span className="border-b-1 border-stone-600 my-5 w-full">
+              <input
+                type="search"
+                placeholder="I'm going to an art exhibition"
+                className="rounded-none my-1 typewriter"
+              />
+            </span>
             <Image
               src={Image4}
               width={250}
@@ -83,11 +87,13 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center">
             <h1 className="text-center my-3 text-sm">Create your own freely</h1>
-            <input
-              type="search"
-              placeholder="I'm going picnic!"
-              className="rounded-none border-b-1 border-stone-600 w-full my-5 typewriter"
-            />
+            <span className="border-b-1 border-stone-600 my-5 w-full">
+              <input
+                type="search"
+                placeholder="I'm going picnic!"
+                className="rounded-none my-1 typewriter"
+              />
+            </span>
             <Image
               src={Image3}
               width={250}

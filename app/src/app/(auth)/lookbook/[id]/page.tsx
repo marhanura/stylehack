@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { IDetail } from "../page";
+import Link from "next/link";
+import Loading from "@/components/Loading";
+import Image from "next/image";
 
 export default function RecDetailPage({
   params,
@@ -8,7 +11,6 @@ export default function RecDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const [recommendation, setRecommendation] = useState<IDetail[]>([]);
-  console.log("🐄 - recommendation:", recommendation);
   useEffect(() => {
     const fetchRecommendation = async () => {
       const { id } = await params;
@@ -24,12 +26,40 @@ export default function RecDetailPage({
     fetchRecommendation();
   }, [params]);
 
-  console.log("🐄 - recommendation:", recommendation);
-  // belum bisa ygy
   return (
-    <div className="h-screen pt-25 px-10">
-      <div className="bg-[#E7DFD1] p-10 h-100 flex flex-col">
+    <div className="h-full pt-25 px-10 mb-10">
+      <div className="bg-[#E7DFD1] p-10 flex flex-col">
         <h1 className="text-center mb-5">Recommendation Detail</h1>
+        {recommendation.length === 0 ? (
+          <Loading />
+        ) : (
+          <div className="flex flex-col gap-2">
+            <p className="badge badge-secondary">
+              {recommendation?.prompt.type}
+            </p>
+            {recommendation.prompt.input.includes("cloudinary") ? (
+              <Image
+                src={recommendation.prompt.input}
+                width={200}
+                height={300}
+                alt={recommendation.prompt.type}
+                className="object-cover self-center my-2"
+                style={{ width: "200px", height: "300px" }}
+              />
+            ) : (
+              <p className="font-bold">{recommendation.prompt.input}</p>
+            )}
+            {recommendation?.products?.map((product, index) => (
+              <div key={index}>
+                <p>
+                  {product.category}: {product.name}
+                </p>
+                <Link href={product.links[0]}>Product 1</Link> /
+                {/* <Link href={product.links[1]}>Product 2</Link> */}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

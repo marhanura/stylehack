@@ -99,7 +99,7 @@ export default function ProfilePage() {
     <div className="h-screen flex justify-center items-center px-10">
       <div className="bg-[#E7DFD1] py-10 flex flex-col">
         <h1 className="text-center mb-5">Profile</h1>
-        <div className="flex flex-row justify-center items-center h-full p-10 gap-5">
+        <div className="flex flex-row justify-center items-center h-full p-10">
           <div className="flex-1 flex flex-col border-r-1 border-black min-h-full gap-2 pr-5">
             <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
               <div className="bg-neutral text-neutral-content w-34 rounded-full">
@@ -129,16 +129,22 @@ export default function ProfilePage() {
                 {user.quota} token
               </span>
             </div>
-            <button
-              className="btn"
-              onClick={() =>
-                (
-                  document.getElementById("buy_token") as HTMLDialogElement
-                )?.showModal()
-              }
-            >
-              Buy Token
-            </button>
+            <div className="flex flex-row justify-between">
+              <Link href="/order-history" className="btn">
+                My Order
+              </Link>
+              <button
+                className="btn"
+                onClick={() =>
+                  (
+                    document.getElementById("buy_token") as HTMLDialogElement
+                  )?.showModal()
+                }
+              >
+                Buy Token
+              </button>
+            </div>
+
             <dialog id="buy_token" className="modal">
               <div className="modal-box">
                 <h3 className="font-bold text-lg">Buy Token</h3>
@@ -158,16 +164,29 @@ export default function ProfilePage() {
               Log Out
             </button>
           </div>
-          <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black min-h-full">
+          <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black min-h-full p-5">
             <h1 className="font-bold text-center">Style Lookbook</h1>
             <div className="flex flex-row gap-2">
               {lookbook.slice(0, 3).map((item) => (
                 <Link
                   href={`/lookbook/${item._id.toString()}`}
-                  className="bg-white p-3 my-3 text-center"
+                  className="bg-white p-1 my-3 text-center justify-center items-center"
                   key={item._id.toString()}
                 >
-                  <p>{item.prompt.input}</p>
+                  {item.prompt.input.includes("cloudinary") ? (
+                    <Image
+                      src={item.prompt.input}
+                      width={100}
+                      height={150}
+                      alt={item.prompt.type}
+                      className="object-cover"
+                      style={{ width: "100px", height: "150px" }}
+                    />
+                  ) : (
+                    <p className="w-[100px] h-[150px] break-keep flex items-center justify-center text-sm">
+                      {item.prompt.input}
+                    </p>
+                  )}
                 </Link>
               ))}
             </div>
@@ -178,16 +197,29 @@ export default function ProfilePage() {
               View All
             </Link>
           </div>
-          <div className="flex-1 flex flex-col justify-between items-center h-full">
+          <div className="flex-1 flex flex-col justify-between items-center h-full p-5">
             <h1 className="font-bold text-center">Wishlist</h1>
             <div className="flex flex-row gap-2">
               {wishlist.slice(0, 3).map((item) => (
                 <Link
                   href={`/wishlist/${item._id.toString()}`}
-                  className="bg-white p-3 my-3 text-center"
+                  className="bg-white p-1 my-3 text-center justify-center items-center"
                   key={item._id.toString()}
                 >
-                  <p>{item.recommendation.prompt.input}</p>
+                  {item.recommendation.prompt.input.includes("cloudinary") ? (
+                    <Image
+                      src={item.recommendation.prompt.input}
+                      width={100}
+                      height={150}
+                      alt={item.recommendation.prompt.type}
+                      className="object-cover"
+                      style={{ width: "100px", height: "150px" }}
+                    />
+                  ) : (
+                    <p className="w-[100px] h-[150px] break-keep flex items-center justify-center text-sm">
+                      {item.recommendation.prompt.input}
+                    </p>
+                  )}
                 </Link>
               ))}
             </div>

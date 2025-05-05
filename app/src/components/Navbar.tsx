@@ -35,9 +35,8 @@ export default function Navbar() {
         </div>
         <div className="navbar-end gap-3 pr-2">
           <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
+            <Link
+              href="/profile"
               className="hover:cursor-pointer inline-flex gap-1 items-center"
             >
               <svg
@@ -55,21 +54,7 @@ export default function Navbar() {
                 />
               </svg>
               My Account
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-            >
-              <li>
-                <Link href="/profile">My Profile</Link>
-              </li>
-              <li>
-                <Link href="/lookbook">My Lookbook</Link>
-              </li>
-              <li>
-                <Link href="/wishlist">My Wishlist</Link>
-              </li>
-            </ul>
+            </Link>
           </div>
         </div>
       </div>
