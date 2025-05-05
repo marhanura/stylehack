@@ -1,15 +1,12 @@
 "use client";
 import Image from "next/image";
-// import ImageLookbook from "../../../../public/image4.webp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Image1 from "@/../public/avatar1.png";
-import Image2 from "@/../public/avatar2.png";
-import Image3 from "@/../public/avatar3.png";
+import AvatarFemale from "@/../public/avatar_female.png";
+import AvatarMale from "@/../public/avatar_male.png";
 import { removeToken } from "../../../../actions";
 import Swal from "sweetalert2";
 import { IUser } from "@/db/models/UserModel";
-// import { IWishlistDetail } from "../wishlist/page";
 import { IDetail } from "../lookbook/page";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
@@ -45,8 +42,6 @@ export default function ProfilePage() {
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
   const [wishlist, setWishlist] = useState<IDetail[]>([]);
   const [loading, setLoading] = useState(true);
-  const avatars = [Image1, Image2, Image3];
-  const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -109,7 +104,7 @@ export default function ProfilePage() {
               <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
                 <div className="bg-neutral text-neutral-content w-34 rounded-full">
                   <Image
-                    src={randomAvatar}
+                    src={user.gender === "female" ? AvatarFemale : AvatarMale}
                     alt="Avatar"
                     width={100}
                     className="rounded-full"
@@ -125,11 +120,14 @@ export default function ProfilePage() {
               </div>
               <p className="mt-5">Available tokens: {user.quota} token</p>
               <div className="flex flex-row justify-between items-center w-full gap-3">
-                <Link href="/order-history" className="button-slide flex-1">
+                <Link
+                  href="/order-history"
+                  className="button-slide flex-1 text-sm "
+                >
                   My Order
                 </Link>
                 <button
-                  className="button-slide flex-1"
+                  className="button-slide flex-1 text-sm "
                   onClick={() =>
                     (
                       document.getElementById("buy_token") as HTMLDialogElement
@@ -154,7 +152,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </dialog>
-              <button className="button-slide" onClick={handleLogout}>
+              <button className="button-slide text-sm " onClick={handleLogout}>
                 Log Out
               </button>
             </div>

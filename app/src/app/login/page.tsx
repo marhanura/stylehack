@@ -44,7 +44,7 @@ export default async function LoginPage(props: IProps) {
   const { error } = (await props.searchParams) || {};
 
   return (
-    <div className="flex flex-row min-h-screen bg-[#E7DFD1]">
+    <div className="flex flex-row min-h-screen bg-[#E7DFD1] pt-15">
       <form
         className="flex flex-col flex-1 p-15 items-center justify-center"
         action={handleLogin}
@@ -69,8 +69,11 @@ export default async function LoginPage(props: IProps) {
         <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
           Log In
         </button>
-        <p>
-          Don`t have an account? <Link href="/register">Register</Link>
+        <p className="mt-5 text-sm">
+          Don`t have an account?{" "}
+          <Link href="/register" className="font-bold text-accent">
+            Register
+          </Link>
         </p>
       </form>
       <div className="flex flex-1 justify-center items-center">
