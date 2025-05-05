@@ -15,7 +15,7 @@ function streamUpload(buffer: Buffer): Promise<UploadResult> {
       { resource_type: "auto" },
       (error, result) => {
         if (error) reject(error);
-        else resolve(result as UploadResult); // Type cast to UploadResult
+        else resolve(result as UploadResult);
       }
     );
     stream.end(buffer);

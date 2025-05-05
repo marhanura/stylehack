@@ -2,6 +2,7 @@ import CustomError from "@/db/helpers/CustomError";
 import RecomendationModel from "@/db/models/RecomendationModel";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
@@ -32,5 +33,32 @@ export async function GET(req: NextRequest) {
     }
 
     return Response.json({ message: "ISE" }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const { input } = await request.json();
+    const FASTAPI = process.env.NEXT_PUBLIC_BACKEND_URL!;
+    const res = await fetch(`${FASTAPI}/recommend`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input }),
+    });
+    const data = await res.json();
+    // const data = { message: "jalan" };
+    return NextResponse.json(data, { status: 200 });
+  } catch (err: any) {
+    console.log(err);
+    if (err instanceof CustomError) {
+      return NextResponse.json(
+        { message: err.message },
+        { status: err.status }
+      );
+    }
+    return NextResponse.json(
+      { message: err.message || "Internal Error" },
+      { status: 500 }
+    );
   }
 }
