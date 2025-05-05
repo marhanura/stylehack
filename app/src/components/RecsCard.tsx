@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { IDetail } from "@/app/(auth)/lookbook/page";
 import Swal from "sweetalert2";
-import ProductPreview from "./ProductPreview";
-import { useEffect, useState } from "react";
 
 interface IStyleCard {
   data: IDetail;
@@ -12,16 +10,6 @@ interface IStyleCard {
 
 export default function RecsCard(data: IStyleCard) {
   const recommendation: IDetail = data.data;
-  const [selectedLink, setSelectedLink] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   if (
-  //     recommendation?.products?.length > 0 &&
-  //     recommendation.products[0].links?.length > 0
-  //   ) {
-  //     setSelectedLink(recommendation.products[0].links[0]);
-  //   }
-  // }, [recommendation]);
 
   const addToWishlist = async (id: string) => {
     const res = await fetch("/api/wishlists", {
@@ -48,7 +36,7 @@ export default function RecsCard(data: IStyleCard) {
   return (
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
-        <div className="h-[400px] overflow-hidden">
+        <div className="h-[400px] overflow-auto">
           <div className="badge badge-secondary">
             {recommendation.prompt.type}
           </div>
@@ -58,40 +46,35 @@ export default function RecsCard(data: IStyleCard) {
               width={200}
               height={300}
               alt={recommendation.prompt.type}
-              className="object-cover my-2"
+              className="object-cover my-3 mx-auto"
               style={{ width: "200px", height: "300px" }}
             />
           ) : (
-            <p className="my-2">{recommendation.prompt.input}</p>
+            <p className="my-3 text-lg">{recommendation.prompt.input}</p>
           )}
-
-          {/* {selectedLink && <ProductPreview url={selectedLink} />} */}
-
           {recommendation.products?.map((product, index) => (
             <div key={index} className="mb-3">
-              <p className="text-sm">
-                <span className="font-semibold">{product.category}</span>:{" "}
-                {product.name}
+              <p className="text-sm my-2">
+                <span className="badge badge-accent border-none mr-2">
+                  {product.category}
+                </span>
+                <span className="font-medium">{product.name}</span>
               </p>
               <div className="flex flex-wrap gap-2 mt-1">
                 {product.links?.map((link, index) => (
-                  <button
+                  <Link
                     key={index}
-                    onClick={() => setSelectedLink(link)}
-                    className={`text-sm py-1 px-2 rounded ${
-                      selectedLink === link
-                        ? "bg-primary text-white"
-                        : "bg-gray-100"
-                    }`}
+                    className="text-sm py-1 p-2 underline"
+                    href={link}
+                    target="_blank"
                   >
                     Product {index + 1}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
           ))}
         </div>
-
         <div className="card-actions justify-end mt-3">
           <Link href={`/lookbook/${recommendation._id}`} className="btn">
             See Detail

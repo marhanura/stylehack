@@ -150,7 +150,6 @@ export default class OrderModel {
       { createdAt: { $lt: twentyFourHoursFromNow } },
       { $set: { status: "Expired", updatedAt: new Date() } }
     );
-    console.log("jalanbro");
     return "Order expire successfully";
   }
 }

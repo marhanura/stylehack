@@ -18,7 +18,6 @@ export interface IDetail {
 
 export default function LookbookPage() {
   const [recommendations, setRecommendations] = useState<IDetail[]>([]);
-  console.log("🐄 - LookbookPage - recommendations:", recommendations);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -52,29 +51,40 @@ export default function LookbookPage() {
   };
   return (
     <div className="h-full bg-[#E7DFD1] pt-25 px-10 h-full flex flex-col">
-      <h1 className="text-center mb-5">My Lookbook</h1>
-      <div className="grid grid-cols-3 gap-10">
-        {recommendations?.map((recommendation) => (
-          <RecsCard key={recommendation._id.toString()} data={recommendation} />
-        ))}
-      </div>
-      <div className="join self-center mt-10">
-        <button
-          className="join-item btn"
-          disabled={currentPage === 1 ? true : false}
-          onClick={() => prevPage()}
-        >
-          «
-        </button>
-        <button className="join-item btn">Page {currentPage}</button>
-        <button
-          className="join-item btn"
-          disabled={currentPage === totalPage ? true : false}
-          onClick={() => nextPage()}
-        >
-          »
-        </button>
-      </div>
+      <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
+        My Lookbook
+      </h1>
+      {recommendations.length === 0 ? (
+        <p className="text-center">No recommendations yet.</p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-3 gap-10">
+            {recommendations?.map((recommendation) => (
+              <RecsCard
+                key={recommendation._id.toString()}
+                data={recommendation}
+              />
+            ))}
+          </div>
+          <div className="join self-center mt-10">
+            <button
+              className="join-item btn"
+              disabled={currentPage === 1 ? true : false}
+              onClick={() => prevPage()}
+            >
+              «
+            </button>
+            <button className="join-item btn">Page {currentPage}</button>
+            <button
+              className="join-item btn"
+              disabled={currentPage === totalPage ? true : false}
+              onClick={() => nextPage()}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
