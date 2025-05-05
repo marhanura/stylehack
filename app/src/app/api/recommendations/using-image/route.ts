@@ -25,6 +25,7 @@ function streamUpload(buffer: Buffer): Promise<UploadResult> {
 export async function POST(req: Request) {
   try {
     const userId = req.headers.get("x-user-id");
+    console.log("upload gambar");
 
     const formData = await req.formData();
     const file = formData.get("file");
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
     if (file.size === 0) {
       return NextResponse.json({ error: "File is empty" }, { status: 400 });
     }
+    console.log("udah sampe sini");
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);

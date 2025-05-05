@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import ImageLookbook from "../../../../public/image4.webp";
+// import ImageLookbook from "../../../../public/image4.webp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image1 from "@/../public/avatar1.png";
@@ -42,11 +42,11 @@ export default function ProfilePage() {
     ageRange: "",
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
+  console.log("🐄 - ProfilePage - lookbook:", lookbook);
   const [wishlist, setWishlist] = useState<IDetail[]>([]);
+  console.log("🐄 - ProfilePage - wishlist:", wishlist);
   const avatars = [Image1, Image2, Image3];
-  const randomAvatar = useState(
-    () => avatars[Math.floor(Math.random() * avatars.length)]
-  );
+  const randomAvatar = avatars[0];
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +63,7 @@ export default function ProfilePage() {
       if (!res.ok) {
         throw new Error(data.message);
       }
-      setWishlist(data);
+      setWishlist(data.data);
     };
     const fetchRecommendations = async () => {
       const res = await fetch(`http://localhost:3000/api/recommendations`);
@@ -71,7 +71,7 @@ export default function ProfilePage() {
       if (!res.ok) {
         throw new Error(data.message);
       }
-      setLookbook(data);
+      setLookbook(data.data);
     };
     fetchUser();
     fetchWishlist();
@@ -99,12 +99,12 @@ export default function ProfilePage() {
     <div className="h-screen flex justify-center items-center px-10">
       <div className="bg-[#E7DFD1] py-10 flex flex-col">
         <h1 className="text-center mb-5">Profile</h1>
-        <div className="flex flex-row justify-center items-center h-full">
-          <div className="mx-10 flex-1 flex flex-col border-r-1 border-black min-h-full gap-2 pr-5">
+        <div className="flex flex-row justify-center items-center h-full p-10 gap-5">
+          <div className="flex-1 flex flex-col border-r-1 border-black min-h-full gap-2 pr-5">
             <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
               <div className="bg-neutral text-neutral-content w-34 rounded-full">
                 <Image
-                  src={randomAvatar[0]}
+                  src={Image1}
                   alt="Avatar"
                   width={100}
                   className="rounded-full"
@@ -121,7 +121,7 @@ export default function ProfilePage() {
             <div>
               <h1 className="font-bold mt-5">Available Tokens</h1>
               <progress
-                className="progress progress-accent w-70"
+                className="progress progress-accent w-60"
                 value={user.quota}
                 max="10"
               ></progress>
@@ -161,7 +161,7 @@ export default function ProfilePage() {
           <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black min-h-full">
             <h1 className="font-bold text-center">Style Lookbook</h1>
             <div className="flex flex-row gap-2">
-              {lookbook.map((item) => (
+              {lookbook.slice(0, 3).map((item) => (
                 <Link
                   href={`/lookbook/${item._id.toString()}`}
                   className="bg-white p-3 my-3 text-center"
@@ -181,7 +181,7 @@ export default function ProfilePage() {
           <div className="flex-1 flex flex-col justify-between items-center h-full">
             <h1 className="font-bold text-center">Wishlist</h1>
             <div className="flex flex-row gap-2">
-              {wishlist.map((item) => (
+              {wishlist.slice(0, 3).map((item) => (
                 <Link
                   href={`/wishlist/${item._id.toString()}`}
                   className="bg-white p-3 my-3 text-center"

@@ -56,7 +56,9 @@ body {
   display: inline-block;
   cursor: pointer;
   text-align: center;
-  animation: leave 0.4s forwards;
+  animation: leave 0.8s forwards;
+  padding: 10px;
+  text-align: center;
 }
 
 .button-slide:hover {
