@@ -5,10 +5,18 @@ import Link from "next/link";
 import Loading from "@/components/Loading";
 import Image from "next/image";
 import { IProduct } from "@/db/models/RecomendationModel";
+import { ObjectId } from "mongodb";
 
-interface IRecomendation {
+export interface IRecomendation {
   _id: string;
   userId: string;
+  prompt: { type: string; input: string };
+  products: IProduct[];
+  extraRecommendation?: IExtraRecommendation
+}
+
+interface IExtraRecommendation {
+  userId: ObjectId;
   prompt: { type: string; input: string };
   products: IProduct[];
 }
