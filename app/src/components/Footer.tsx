@@ -5,10 +5,12 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="footer sm:footer-horizontal bg-[#E7DFD1] text-black p-10 shadow-md">
-      <aside>
+      <aside className="flex flex-col items-start justify-between gap-5 h-full">
         <Image src={Logo} alt="Logo" width={120} height={30} className="mb-3" />
-        <p>© 2025 StyleHack. All rights reserved.</p>
-        <p>Fashion made easy, personalized, and effortless.</p>
+        <div>
+          <p>© 2025 StyleHack. All rights reserved.</p>
+          <p>Fashion made easy, personalized, and effortless.</p>
+        </div>
       </aside>
       <nav className="text-right ml-auto">
         <Link className="footer-title text-right w-full" href="/about">

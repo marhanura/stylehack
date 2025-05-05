@@ -13,7 +13,7 @@ export interface IRecomendation {
   userId: string;
   prompt: { type: string; input: string };
   products: IProduct[];
-  extraRecommendation?: IExtraRecommendation
+  extraRecommendation?: IExtraRecommendation;
 }
 
 interface IExtraRecommendation {
@@ -43,10 +43,10 @@ export default function RecDetailPage({
       if (!res.ok) {
         Swal.fire({
           title: "Not found",
-          icon: "error"
-        })
-        setError(true)
-        return
+          icon: "error",
+        });
+        setError(true);
+        return;
         // const err: { message: string } = await res.json();
         // throw new Error(err.message);
       }
@@ -61,6 +61,7 @@ export default function RecDetailPage({
       <div className="bg-[#E7DFD1] p-10 flex flex-col">
         <h1 className="text-center mb-5">Recommendation Detail</h1>
         {error? <h1>Error</h1> : recommendation.products?.length === 0 ? (
+
           <Loading />
         ) : (
           <div className="flex flex-col gap-2">
@@ -81,13 +82,16 @@ export default function RecDetailPage({
             )}
             {recommendation?.products?.map((product, index) => (
               <div key={index}>
-                <p>
-                  {product.category}: {product.name}
+                <p className="text-sm my-2">
+                  <span className="badge badge-accent border-none mr-2">
+                    {product.category}
+                  </span>
+                  <span className="font-medium">{product.name}</span>
                 </p>
                 {product.links?.map((link, index) => (
                   <Link
                     key={index}
-                    className="text-sm py-1 px-2 badge badge-accent border-none  mr-2"
+                    className="text-sm py-1 px-2 underline"
                     href={link}
                     target="_blank"
                   >

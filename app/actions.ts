@@ -1,8 +1,6 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import * as cheerio from "cheerio";
-import CustomError from "@/db/helpers/CustomError";
 
 export async function removeToken() {
   const cookieStore = await cookies();

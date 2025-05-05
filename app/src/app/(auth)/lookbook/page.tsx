@@ -50,7 +50,7 @@ export default function LookbookPage() {
     }
   };
   return (
-    <div className="h-full bg-[#E7DFD1] pt-25 px-10 h-full flex flex-col">
+    <div className="h-full pt-25 px-10 h-full flex flex-col">
       <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
         My Lookbook
       </h1>
@@ -66,7 +66,7 @@ export default function LookbookPage() {
               />
             ))}
           </div>
-          <div className="join self-center mt-10">
+          <div className="join self-center my-10">
             <button
               className="join-item btn"
               disabled={currentPage === 1 ? true : false}
