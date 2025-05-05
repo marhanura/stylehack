@@ -8,6 +8,7 @@ export default function RecDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const [recommendation, setRecommendation] = useState<IDetail[]>([]);
+  console.log("🐄 - recommendation:", recommendation);
   useEffect(() => {
     const fetchRecommendation = async () => {
       const { id } = await params;

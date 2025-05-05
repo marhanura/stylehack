@@ -18,17 +18,37 @@ export interface IDetail {
 
 export default function LookbookPage() {
   const [recommendations, setRecommendations] = useState<IDetail[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const fetchRecommendations = async () => {
+    const res = await fetch(
+      `http://localhost:3000/api/recommendations?page=${currentPage}`
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+    setRecommendations(data.data);
+    setCurrentPage(data.currentPage);
+    setTotalPage(data.totalPage);
+  };
+
   useEffect(() => {
-    const fetchRecommendations = async () => {
-      const res = await fetch(`http://localhost:3000/api/recommendations`);
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
-      setRecommendations(data);
-    };
     fetchRecommendations();
-  }, []);
+  }, [currentPage]);
+
+  const nextPage = () => {
+    if (currentPage < totalPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
   return (
     <div className="h-full bg-[#E7DFD1] pt-25 px-10 h-full flex flex-col">
       <h1 className="text-center mb-5">My Lookbook</h1>
@@ -36,6 +56,23 @@ export default function LookbookPage() {
         {recommendations.map((recommendation) => (
           <RecsCard key={recommendation._id.toString()} data={recommendation} />
         ))}
+      </div>
+      <div className="join self-center mt-10">
+        <button
+          className="join-item btn"
+          disabled={currentPage === 1 ? true : false}
+          onClick={() => prevPage()}
+        >
+          «
+        </button>
+        <button className="join-item btn">Page {currentPage}</button>
+        <button
+          className="join-item btn"
+          disabled={currentPage === totalPage ? true : false}
+          onClick={() => nextPage()}
+        >
+          »
+        </button>
       </div>
     </div>
   );
