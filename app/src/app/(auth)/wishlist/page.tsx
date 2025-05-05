@@ -42,7 +42,7 @@ export default function WishlistPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E7DFD1] pt-25 px-10 flex flex-col">
+    <div className="min-h-screen pt-25 px-10 flex flex-col">
       <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
         My Wishlist
       </h1>
@@ -59,7 +59,7 @@ export default function WishlistPage() {
               />
             ))}
           </div>
-          <div className="join self-center mt-10">
+          <div className="join self-center my-10">
             <button
               className="join-item btn"
               disabled={currentPage === 1 ? true : false}

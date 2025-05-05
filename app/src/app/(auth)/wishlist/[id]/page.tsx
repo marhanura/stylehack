@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { IDetail } from "../../lookbook/page";
-// import { IStyleCard } from "@/components/WishlistCard";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import Image from "next/image";
@@ -96,13 +94,16 @@ export default function WishlistDetailPage({
             )}
             {wishlist.recommendation?.products?.map((product, index) => (
               <div key={index}>
-                <p>
-                  {product.category}: {product.name}
+                <p className="text-sm my-2">
+                  <span className="badge badge-accent border-none mr-2">
+                    {product.category}
+                  </span>
+                  <span className="font-medium">{product.name}</span>
                 </p>
                 {product.links?.map((link, index) => (
                   <Link
                     key={index}
-                    className="text-sm py-1 px-2 badge badge-accent border-none mr-2"
+                    className="text-sm py-1 px-2 underline"
                     href={link}
                     target="_blank"
                   >

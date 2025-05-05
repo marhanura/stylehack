@@ -43,9 +43,9 @@ export default async function RegisterPage(props: IProps) {
   const { error } = (await props.searchParams) || {};
 
   return (
-    <div className="flex flex-row min-h-screen bg-[#E7DFD1]">
+    <div className="flex flex-row min-h-screen bg-[#E7DFD1] pt-15">
       <form
-        className="flex flex-col flex-1 p-15 items-center justify-center"
+        className="flex flex-col flex-1 px-15 items-center justify-center"
         action={handleRegister}
       >
         <Image src={Logo} height={30} alt="Logo" className="mb-5" />
@@ -53,7 +53,6 @@ export default async function RegisterPage(props: IProps) {
           Register
         </h1>
         {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
-
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
@@ -92,8 +91,11 @@ export default async function RegisterPage(props: IProps) {
         <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
           Register
         </button>
-        <p>
-          Already have an account? <Link href="/login">Log In</Link>
+        <p className="mt-5 text-sm">
+          Already have an account?{" "}
+          <Link href="/login" className="font-bold text-accent">
+            Log In
+          </Link>
         </p>
       </form>
       <div className="flex flex-1 justify-center items-center">

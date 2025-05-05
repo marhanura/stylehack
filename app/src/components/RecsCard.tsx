@@ -52,7 +52,7 @@ export default function RecsCard(data: IStyleCard) {
           ) : (
             <p className="my-3 text-lg">{recommendation.prompt.input}</p>
           )}
-          {recommendation.products?.map((product, index) => (
+          {recommendation.products?.map((product, index: number) => (
             <div key={index} className="mb-3">
               <p className="text-sm my-2">
                 <span className="badge badge-accent border-none mr-2">
@@ -61,7 +61,7 @@ export default function RecsCard(data: IStyleCard) {
                 <span className="font-medium">{product.name}</span>
               </p>
               <div className="flex flex-wrap gap-2 mt-1">
-                {product.links?.map((link, index) => (
+                {product.links?.map((link: string, index: number) => (
                   <Link
                     key={index}
                     className="text-sm py-1 p-2 underline"
