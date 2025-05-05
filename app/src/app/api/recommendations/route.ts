@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 export const dynamic = "force-dynamic";
 import { verifyToken } from "@/db/helpers/jose";
 import { ObjectId } from "mongodb";
+import { callAiRecommendation } from "@/db/helpers/aiHelpers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -40,11 +41,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get("x-user-id");
-    if (!userId)
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    const token = request.cookies.get("access_token")?.value;
+    if (!token) throw new CustomError("Unauthorized", 401);
+    const payload = await verifyToken(token);
+    const userId = payload._id;
 
-    const { input, type } = await request.json();
+    const { type, input } = await request.json();
+    if (!type || !input) throw new CustomError("Missing prompt", 400);
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/recommend`,
       {
@@ -64,6 +68,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ products });
   } catch (err: any) {
-    return NextResponse.json({ message: err.message }, { status: 500 });
+    const status = err.status || 500;
+    const msg = err.message || "Internal Server Error";
+    return NextResponse.json({ message: msg }, { status });
   }
 }
