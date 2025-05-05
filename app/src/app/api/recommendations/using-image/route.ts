@@ -47,6 +47,12 @@ export async function POST(req: Request) {
 
     const result: UploadResult = await streamUpload(buffer);
 
+    if(!result){
+      return NextResponse.json({
+        error: "Error generating recommendation"
+      }, {status: 400})
+    }
+
     return NextResponse.json({
       message: "Upload successful",
       url: result.secure_url,
