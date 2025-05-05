@@ -1,27 +1,41 @@
 "use client";
 import { useEffect, useState } from "react";
-import { IDetail } from "../page";
+// import { IDetail } from "../page";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import Image from "next/image";
+import { IProduct } from "@/db/models/RecomendationModel";
+
+interface IRecomendation {
+  _id: string;
+  userId: string;
+  prompt: { type: string; input: string };
+  products: IProduct[];
+}
 
 export default function RecDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [recommendation, setRecommendation] = useState<IDetail[]>([]);
+  const [recommendation, setRecommendation] = useState<IRecomendation>({
+    _id: "",
+    userId: "",
+    prompt: { type: "", input: "" },
+    products: [],
+  });
   useEffect(() => {
     const fetchRecommendation = async () => {
       const { id } = await params;
       const res = await fetch(
         `http://localhost:3000/api/recommendations/${id}`
       );
-      const data = await res.json();
-      setRecommendation(data);
       if (!res.ok) {
-        throw new Error(data.message);
+        const err: { message: string } = await res.json();
+        throw new Error(err.message);
       }
+      const data: IRecomendation = await res.json();
+      setRecommendation(data);
     };
     fetchRecommendation();
   }, [params]);
@@ -30,7 +44,7 @@ export default function RecDetailPage({
     <div className="h-full pt-25 px-10 mb-10">
       <div className="bg-[#E7DFD1] p-10 flex flex-col">
         <h1 className="text-center mb-5">Recommendation Detail</h1>
-        {recommendation.length === 0 ? (
+        {recommendation.products.length === 0 ? (
           <Loading />
         ) : (
           <div className="flex flex-col gap-2">
