@@ -35,10 +35,16 @@ export async function handleLogin(formData: FormData): Promise<void> {
 }
 
 export default async function LoginPage(props: IProps) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+  if (token) {
+    redirect("/");
+  }
+
   const { error } = (await props.searchParams) || {};
 
   return (
-    <div className="flex flex-row h-screen bg-[#E7DFD1]">
+    <div className="flex flex-row min-h-screen bg-[#E7DFD1]">
       <form
         className="flex flex-col flex-1 p-15 items-center justify-center"
         action={handleLogin}
@@ -48,7 +54,6 @@ export default async function LoginPage(props: IProps) {
           Log In
         </h1>
         {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
-
         <input
           className="input my-3 rounded-sm border-0"
           type="text"

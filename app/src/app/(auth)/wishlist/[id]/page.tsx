@@ -25,7 +25,7 @@ export default function WishlistDetailPage({
     fetchWishlist();
   }, [params]);
   return (
-    <div className="h-full pt-25 px-10 mb-10">
+    <div className="min-h-screen pt-25 px-10 mb-10">
       <div className="bg-[#E7DFD1] p-10 h-full flex flex-col">
         <h1 className="text-center mb-5">My Wishlist Detail</h1>
         {wishlist.recommendation?.length === 0 ? (
@@ -54,8 +54,16 @@ export default function WishlistDetailPage({
                 <p>
                   {product.category}: {product.name}
                 </p>
-                <Link href={product.links[0]}>Product 1</Link> /
-                {/* <Link href={product.links[1]}>Product 2</Link> */}
+                {product.links?.map((link, index) => (
+                  <Link
+                    key={index}
+                    className="text-sm py-1 px-2 badge badge-accent border-none mr-2"
+                    href={link}
+                    target="_blank"
+                  >
+                    Product {index + 1}
+                  </Link>
+                ))}
               </div>
             ))}
           </div>

@@ -5,6 +5,7 @@ import RegisterImage from "../../../public/register.webp";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { IProps } from "../login/page";
+import { cookies } from "next/headers";
 
 export async function handleRegister(formData: FormData): Promise<void> {
   const name = formData.get("name");
@@ -34,10 +35,15 @@ export async function handleRegister(formData: FormData): Promise<void> {
 }
 
 export default async function RegisterPage(props: IProps) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+  if (token) {
+    redirect("/");
+  }
   const { error } = (await props.searchParams) || {};
 
   return (
-    <div className="flex flex-row h-screen bg-[#E7DFD1]">
+    <div className="flex flex-row min-h-screen bg-[#E7DFD1]">
       <form
         className="flex flex-col flex-1 p-15 items-center justify-center"
         action={handleRegister}
@@ -78,7 +84,7 @@ export default async function RegisterPage(props: IProps) {
           className="select my-3 rounded-sm border-0 w-full max-w-xs"
           name="ageRange"
         >
-          <option value="">Select gender</option>
+          <option value="">Select age range</option>
           <option value="child">Child</option>
           <option value="teenager">Teenager</option>
           <option value="adult">Adult</option>

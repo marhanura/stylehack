@@ -10,7 +10,7 @@ export default function Home() {
     <div>
       <div className="h-screen flex flex-col items-end justify-end relative">
         <div className="w-full relative flex flex-row items-center justify-end bottom-0">
-          <div className="ml-10 text-[72px] font-(family-name:--font-bodoni-moda) uppercase tracking-wider font-bold z-0">
+          <div className="ml-15 text-[72px] font-(family-name:--font-bodoni-moda) uppercase tracking-wider font-bold z-0">
             <p className="opacity-90 hover:opacity-100 transition-all duration-300">
               HACK
             </p>
@@ -21,22 +21,18 @@ export default function Home() {
               STYLE
             </p>
           </div>
-          {/* <div className="z-10"> */}
           <Image
             src={MainImage}
             width={500}
             alt="Main Image"
             className="mx-auto z-10"
           />
-          {/* <div className="mt-5 max-w-md"> */}
           <p className="w-80 mb-10 italic text-lg border-l-2 border-primary p-5 bottom-0 self-end">
             Fashion made easy, personalized, and effortless.
           </p>
-          {/* </div> */}
-          {/* </div> */}
         </div>
       </div>
-      <div className="h-full bg-[#e7dfd1] shadow-xl p-10 mx-10">
+      <div className="h-full bg-[#e7dfd1] shadow-xl p-10 mx-10 flex flex-col justify-center">
         <h1 className="text-center my-10 font-(family-name:--font-bodoni-moda) text-[36px]">
           Create your best style
         </h1>
@@ -56,12 +52,6 @@ export default function Home() {
               alt="Example"
               className="clip-image"
             />
-            <Link
-              href="/recommendation"
-              className="p-3 mt-5 bg-primary text-primary-content w-30 text-sm text-center button-slide"
-            >
-              Try It!
-            </Link>
           </div>
           <div className="flex flex-col items-center">
             <h1 className="text-center my-3 text-sm">Based on destination</h1>
@@ -78,12 +68,6 @@ export default function Home() {
               alt="Example"
               className="clip-image"
             />
-            <Link
-              href="/recommendation"
-              className="p-3 mt-5 bg-primary text-primary-content w-30 text-sm text-center button-slide"
-            >
-              Try It!
-            </Link>
           </div>
           <div className="flex flex-col items-center">
             <h1 className="text-center my-3 text-sm">Create your own freely</h1>
@@ -100,14 +84,14 @@ export default function Home() {
               alt="Example"
               className="clip-image"
             />
-            <Link
-              href="/recommendation"
-              className="mt-5 bg-primary text-primary-content w-30 text-sm button-slide"
-            >
-              Try It!
-            </Link>
           </div>
         </div>
+        <Link
+          href="/recommendation"
+          className="button-slide my-10 text-xl mx-auto w-80 font-(family-name:--font-bodoni-moda)"
+        >
+          Create My Style
+        </Link>
       </div>
       <div
         className="hero min-h-screen"
@@ -130,9 +114,6 @@ export default function Home() {
               StyleHack handle the rest. Fashion made easy, personalized, and
               effortless.
             </p>
-            <Link href="/recommendation" className="button-slide">
-              Create My Style
-            </Link>
           </div>
         </div>
       </div>
