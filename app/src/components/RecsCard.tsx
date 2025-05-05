@@ -3,13 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { IDetail } from "@/app/(auth)/lookbook/page";
 import Swal from "sweetalert2";
+import { IRecomendation } from "@/app/(auth)/lookbook/[id]/page";
 
 interface IStyleCard {
-  data: IDetail;
+  data: IRecomendation;
 }
 
 export default function RecsCard(data: IStyleCard) {
-  const recommendation: IDetail = data.data;
+  const recommendation: IRecomendation = data.data;
 
   const addToWishlist = async (id: string) => {
     const res = await fetch("/api/wishlists", {

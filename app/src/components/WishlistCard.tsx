@@ -64,7 +64,7 @@ export default function WishlistCard(props: IStyleCard) {
           ) : (
             <p className="my-2">{wishlist.recommendation.prompt.input}</p>
           )}
-          {wishlist.recommendation.products.map((product, index) => (
+          {wishlist.recommendation.products?.map((product, index) => (
             <div key={index}>
               <p className="text-sm my-2">
                 <span className="badge badge-accent border-none mr-2">
