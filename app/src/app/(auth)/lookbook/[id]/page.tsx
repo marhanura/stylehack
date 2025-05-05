@@ -6,6 +6,7 @@ import Loading from "@/components/Loading";
 import Image from "next/image";
 import { IProduct } from "@/db/models/RecomendationModel";
 import { ObjectId } from "mongodb";
+import Swal from "sweetalert2";
 
 export interface IRecomendation {
   _id: string;
@@ -32,6 +33,7 @@ export default function RecDetailPage({
     prompt: { type: "", input: "" },
     products: [],
   });
+  const [error, setError] = useState(false);
   useEffect(() => {
     const fetchRecommendation = async () => {
       const { id } = await params;
@@ -39,8 +41,14 @@ export default function RecDetailPage({
         `http://localhost:3000/api/recommendations/${id}`
       );
       if (!res.ok) {
-        const err: { message: string } = await res.json();
-        throw new Error(err.message);
+        Swal.fire({
+          title: "Not found",
+          icon: "error"
+        })
+        setError(true)
+        return
+        // const err: { message: string } = await res.json();
+        // throw new Error(err.message);
       }
       const data: IRecomendation = await res.json();
       setRecommendation(data);
@@ -52,7 +60,7 @@ export default function RecDetailPage({
     <div className="h-full pt-25 px-10 mb-10">
       <div className="bg-[#E7DFD1] p-10 flex flex-col">
         <h1 className="text-center mb-5">Recommendation Detail</h1>
-        {recommendation.products.length === 0 ? (
+        {error? <h1>Error</h1> : recommendation.products.length === 0 ? (
           <Loading />
         ) : (
           <div className="flex flex-col gap-2">
