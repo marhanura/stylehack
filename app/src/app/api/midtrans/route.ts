@@ -14,13 +14,14 @@ interface IBody {
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  console.log(body, "<<<<<<<<body");
+  const body: IBody = await request.json();
+  // console.log(body, "<<<<<<<<body");
   try {
     if (
       body.transaction_status !== "settlement" &&
       body.transaction_status !== "capture" && 
-      body.transaction_status !== "pending"
+      body.transaction_status !== "pending" &&
+      body.transaction_status !== "expire"
     ) {
       throw new CustomError("Status not right", 400);
     }
@@ -43,6 +44,11 @@ export async function POST(request: NextRequest) {
         await OrderModel.updateStatusPending(order._id)
         return Response.json({message: 'oke bang'}, {status: 200})
     }
+
+    if(body.transaction_status === "expire"){
+      await OrderModel.updateStatusExpire(order._id)
+      return Response.json({message: 'oke bang'}, {status: 200})
+  }
     
     if (!body.gross_amount) {
       throw new CustomError("Gross amount required", 400);
@@ -91,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     return Response.json({ message: "success", order }, { status: 200 });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error instanceof CustomError) {
       return Response.json(
         { message: error.message },

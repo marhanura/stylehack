@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 
-interface IOrder {
+export interface IOrder {
   userId: ObjectId;
   amount: number;
   status: string;
@@ -27,7 +27,7 @@ export default class OrderModel {
     return order
   }
 
-  static async find(userId: ObjectId){
+  static async find(userId: ObjectId, skip: number){
     const collection = this.getCollection()
 
     const orders = await collection.aggregate([
@@ -39,10 +39,16 @@ export default class OrderModel {
         '$sort': {
           'createdAt': -1
         }
+      },{
+        '$skip': skip
+      }, {
+        '$limit': 10
       }
     ]).toArray()
 
-    return orders
+    const count = await collection.countDocuments({userId: userId}) / 10;
+
+    return {data: orders, totalPage: Math.ceil(count)}
   }
 
   static async createOrder(userId: ObjectId) {
@@ -50,7 +56,7 @@ export default class OrderModel {
     const order: IOrder = {
       userId,
       amount: 99000,
-      status: "waitingForPayment",
+      status: "Waiting Payment",
       redirectLink: "",
       paidAt: "",
       createdAt: new Date().toISOString(),
@@ -104,7 +110,7 @@ export default class OrderModel {
     const collection = this.getCollection();
     await collection.updateOne(
       { _id: orderId },
-      { $set: { status: "paid", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
+      { $set: { status: "Paid", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
     );
     return "Order paid successfully";
   }
@@ -113,8 +119,17 @@ export default class OrderModel {
     const collection = this.getCollection();
     await collection.updateOne(
       { _id: orderId },
-      { $set: { status: "pending", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
+      { $set: { status: "Pending", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
     );
     return "Order pending successfully";
+  }
+
+  static async updateStatusExpire(orderId: ObjectId) {
+    const collection = this.getCollection();
+    await collection.updateOne(
+      { _id: orderId },
+      { $set: { status: "Expire", paidAt: new Date().toISOString(), updatedAt: new Date().toISOString() } }
+    );
+    return "Order expire successfully";
   }
 }
