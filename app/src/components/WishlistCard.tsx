@@ -48,7 +48,7 @@ export default function WishlistCard(props: IStyleCard) {
   return (
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
-        <div className="h-[400px] overflow-hidden">
+        <div className="h-[400px] overflow-auto">
           <div className="badge badge-secondary">
             {wishlist.recommendation.prompt.type}
           </div>
@@ -58,7 +58,7 @@ export default function WishlistCard(props: IStyleCard) {
               width={200}
               height={300}
               alt={wishlist.recommendation.prompt.type}
-              className="object-cover my-2"
+              className="object-cover my-3 mx-auto my-2"
               style={{ width: "200px", height: "300px" }}
             />
           ) : (
@@ -66,11 +66,22 @@ export default function WishlistCard(props: IStyleCard) {
           )}
           {wishlist.recommendation.products.map((product, index) => (
             <div key={index}>
-              <p>
-                {product.category}: {product.name}
+              <p className="text-sm my-2">
+                <span className="badge badge-accent border-none mr-2">
+                  {product.category}
+                </span>
+                <span className="font-medium">{product.name}</span>
               </p>
-              <Link href={product.links[0]}>Product 1</Link> /
-              {/* <Link href={product.links[1]}>Product 2</Link> */}
+              {product.links?.map((link, index) => (
+                <Link
+                  key={index}
+                  className="text-sm py-1 p-2 underline"
+                  href={link}
+                  target="_blank"
+                >
+                  Product {index + 1}
+                </Link>
+              ))}
             </div>
           ))}
         </div>

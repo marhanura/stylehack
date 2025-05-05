@@ -54,8 +54,16 @@ export default function RecDetailPage({
                 <p>
                   {product.category}: {product.name}
                 </p>
-                <Link href={product.links[0]}>Product 1</Link> /
-                {/* <Link href={product.links[1]}>Product 2</Link> */}
+                {product.links?.map((link, index) => (
+                  <Link
+                    key={index}
+                    className="text-sm py-1 px-2 badge badge-accent border-none  mr-2"
+                    href={link}
+                    target="_blank"
+                  >
+                    Product {index + 1}
+                  </Link>
+                ))}
               </div>
             ))}
           </div>

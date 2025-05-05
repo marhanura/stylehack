@@ -12,6 +12,7 @@ import { IUser } from "@/db/models/UserModel";
 // import { IWishlistDetail } from "../wishlist/page";
 import { IDetail } from "../lookbook/page";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/Loading";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -42,11 +43,10 @@ export default function ProfilePage() {
     ageRange: "",
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
-  console.log("🐄 - ProfilePage - lookbook:", lookbook);
   const [wishlist, setWishlist] = useState<IDetail[]>([]);
-  console.log("🐄 - ProfilePage - wishlist:", wishlist);
+  const [loading, setLoading] = useState(true);
   const avatars = [Image1, Image2, Image3];
-  const randomAvatar = avatars[0];
+  const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -56,6 +56,7 @@ export default function ProfilePage() {
         throw new Error(data.message);
       }
       setUser(data);
+      setLoading(false);
     };
     const fetchWishlist = async () => {
       const res = await fetch(`http://localhost:3000/api/wishlists`);
@@ -64,6 +65,7 @@ export default function ProfilePage() {
         throw new Error(data.message);
       }
       setWishlist(data.data);
+      setLoading(false);
     };
     const fetchRecommendations = async () => {
       const res = await fetch(`http://localhost:3000/api/recommendations`);
@@ -72,6 +74,7 @@ export default function ProfilePage() {
         throw new Error(data.message);
       }
       setLookbook(data.data);
+      setLoading(false);
     };
     fetchUser();
     fetchWishlist();
@@ -96,140 +99,166 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center px-10">
-      <div className="bg-[#E7DFD1] py-10 flex flex-col">
-        <h1 className="text-center mb-5">Profile</h1>
-        <div className="flex flex-row justify-center items-center h-full p-10">
-          <div className="flex-1 flex flex-col border-r-1 border-black min-h-full gap-2 pr-5">
-            <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
-              <div className="bg-neutral text-neutral-content w-34 rounded-full">
-                <Image
-                  src={Image1}
-                  alt="Avatar"
-                  width={100}
-                  className="rounded-full"
-                />
-              </div>
-              <div className="flex flex-col justify-start items-start w-full">
-                <h1 className="text-left w-full">{user.name}</h1>
-                <p className="text-left w-full">{user.email}</p>
-                <p className="text-left w-full capitalize">
-                  {user.gender} - Adult
-                </p>
-              </div>
-            </div>
-            <div>
-              <h1 className="font-bold mt-5">Available Tokens</h1>
-              <progress
-                className="progress progress-accent w-60"
-                value={user.quota}
-                max="10"
-              ></progress>
-              <span className="text-center ml-5 text-sm">
-                {user.quota} token
-              </span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <Link href="/order-history" className="btn">
-                My Order
-              </Link>
-              <button
-                className="btn"
-                onClick={() =>
-                  (
-                    document.getElementById("buy_token") as HTMLDialogElement
-                  )?.showModal()
-                }
-              >
-                Buy Token
-              </button>
-            </div>
-
-            <dialog id="buy_token" className="modal">
-              <div className="modal-box">
-                <h3 className="font-bold text-lg">Buy Token</h3>
-                <p className="font-bold text-lg">Rp. 99.000</p>
-                <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
-                <div className="modal-action flex justify-between">
-                  <button className="btn" onClick={handleBuy}>
-                    Buy Token
-                  </button>
-                  <form method="dialog">
-                    <button className="btn">Cancel</button>
-                  </form>
+    <div className="min-h-full flex flex-row pt-25 px-5 pb-10">
+      <div className="flex-1 flex flex-col justify-between items-center p-5">
+        <div className="bg-[#E7DFD1] w-full h-100 p-10 flex flex-col">
+          <h1 className="text-center mb-5 font-bold">Profile</h1>
+          {loading && <Loading />}
+          <div className="flex flex-row justify-center items-center h-full">
+            <div className="flex-1 flex flex-col justify-between min-h-full gap-2 w-full">
+              <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
+                <div className="bg-neutral text-neutral-content w-34 rounded-full">
+                  <Image
+                    src={randomAvatar}
+                    alt="Avatar"
+                    width={100}
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="flex flex-col justify-start items-start w-full">
+                  <h1 className="text-left w-full">{user.name}</h1>
+                  <p className="text-left w-full">{user.email}</p>
+                  <p className="text-left w-full capitalize">
+                    {user.gender} - {user.ageRange}
+                  </p>
                 </div>
               </div>
-            </dialog>
-            <button className="btn" onClick={handleLogout}>
-              Log Out
-            </button>
-          </div>
-          <div className="flex-1 flex flex-col justify-between items-center border-r-1 border-black min-h-full p-5">
-            <h1 className="font-bold text-center">Style Lookbook</h1>
-            <div className="flex flex-row gap-2">
-              {lookbook.slice(0, 3).map((item) => (
-                <Link
-                  href={`/lookbook/${item._id.toString()}`}
-                  className="bg-white p-1 my-3 text-center justify-center items-center"
-                  key={item._id.toString()}
-                >
-                  {item.prompt.input.includes("cloudinary") ? (
-                    <Image
-                      src={item.prompt.input}
-                      width={100}
-                      height={150}
-                      alt={item.prompt.type}
-                      className="object-cover"
-                      style={{ width: "100px", height: "150px" }}
-                    />
-                  ) : (
-                    <p className="w-[100px] h-[150px] break-keep flex items-center justify-center text-sm">
-                      {item.prompt.input}
-                    </p>
-                  )}
+              <p className="mt-5">Available tokens: {user.quota} token</p>
+              <div className="flex flex-row justify-between items-center w-full gap-3">
+                <Link href="/order-history" className="button-slide flex-1">
+                  My Order
                 </Link>
-              ))}
-            </div>
-            <Link
-              href="/lookbook"
-              className="p-1 bg-primary text-primary-content w-50 text-sm button-slide"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="flex-1 flex flex-col justify-between items-center h-full p-5">
-            <h1 className="font-bold text-center">Wishlist</h1>
-            <div className="flex flex-row gap-2">
-              {wishlist.slice(0, 3).map((item) => (
-                <Link
-                  href={`/wishlist/${item._id.toString()}`}
-                  className="bg-white p-1 my-3 text-center justify-center items-center"
-                  key={item._id.toString()}
+                <button
+                  className="button-slide flex-1"
+                  onClick={() =>
+                    (
+                      document.getElementById("buy_token") as HTMLDialogElement
+                    )?.showModal()
+                  }
                 >
-                  {item.recommendation.prompt.input.includes("cloudinary") ? (
-                    <Image
-                      src={item.recommendation.prompt.input}
-                      width={100}
-                      height={150}
-                      alt={item.recommendation.prompt.type}
-                      className="object-cover"
-                      style={{ width: "100px", height: "150px" }}
-                    />
-                  ) : (
-                    <p className="w-[100px] h-[150px] break-keep flex items-center justify-center text-sm">
-                      {item.recommendation.prompt.input}
-                    </p>
-                  )}
-                </Link>
-              ))}
+                  Buy Token
+                </button>
+              </div>
+              <dialog id="buy_token" className="modal">
+                <div className="modal-box rounded-none">
+                  <h3 className="font-bold text-lg">Buy Token</h3>
+                  <p className="font-bold text-lg">Rp. 99.000</p>
+                  <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
+                  <div className="modal-action flex justify-between">
+                    <button className="button-slide" onClick={handleBuy}>
+                      Buy Token
+                    </button>
+                    <form method="dialog">
+                      <button className="button-slide">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
+              <button className="button-slide" onClick={handleLogout}>
+                Log Out
+              </button>
             </div>
-            <Link
-              href="/wishlist"
-              className="p-1 bg-primary text-primary-content w-50 text-sm button-slide"
-            >
-              View All
-            </Link>
           </div>
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col justify-between items-center p-5">
+        <div className="bg-[#E7DFD1] w-full h-100 py-10 flex flex-col items-center justify-between">
+          <h1 className="font-bold text-center flex-1">Style Lookbook</h1>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="flex flex-row gap-2 flex-5 justify-between">
+              {lookbook.length === 0 ? (
+                <p>No style yet.</p>
+              ) : (
+                <div className="flex flex-col justify-between">
+                  <div className="flex flex-row gap-2  justify-center items-center">
+                    {lookbook.slice(0, 3).map((item) => (
+                      <Link
+                        href={`/lookbook/${item._id.toString()}`}
+                        className="bg-white p-1 my-3 text-center justify-center items-center"
+                        key={item._id.toString()}
+                      >
+                        {item.prompt.input.includes("cloudinary") ? (
+                          <Image
+                            src={item.prompt.input}
+                            width={100}
+                            height={150}
+                            alt={item.prompt.type}
+                            className="object-cover"
+                            style={{ width: "100px", height: "150px" }}
+                          />
+                        ) : (
+                          <div className="w-[100px] h-[150px] break-keep flex flex-col items-center justify-center text-sm">
+                            <p className="font-bold">{item.prompt.type}:</p>
+                            <p>{item.prompt.input}</p>
+                          </div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    href="/lookbook"
+                    className="p-1 bg-primary text-primary-content w-50 text-sm button-slide self-center"
+                  >
+                    View All
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col justify-between items-center p-5">
+        <div className="bg-[#E7DFD1] w-full h-100 py-10 flex flex-col items-center justify-between">
+          <h1 className="font-bold text-center flex-1">Style Wishlist</h1>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="flex flex-row gap-2 flex-5 justify-between">
+              {wishlist.length === 0 ? (
+                <p>No wishlist yet.</p>
+              ) : (
+                <div className="flex flex-col justify-between">
+                  <div className="flex flex-row gap-2 justify-center items-center">
+                    {wishlist.slice(0, 3).map((item) => (
+                      <Link
+                        href={`/wishlist/${item._id.toString()}`}
+                        className="bg-white p-1 my-3 text-center justify-center items-center"
+                        key={item._id.toString()}
+                      >
+                        {item.recommendation.prompt.input.includes(
+                          "cloudinary"
+                        ) ? (
+                          <Image
+                            src={item.recommendation.prompt.input}
+                            width={100}
+                            height={150}
+                            alt={item.recommendation.prompt.type}
+                            className="object-cover"
+                            style={{ width: "100px", height: "150px" }}
+                          />
+                        ) : (
+                          <div className="w-[100px] h-[150px] break-keep flex flex-col items-center justify-center text-sm">
+                            <p className="font-bold">
+                              {item.recommendation.prompt.type}:
+                            </p>
+                            <p>{item.recommendation.prompt.input}</p>
+                          </div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    href="/wishlist"
+                    className="p-1 bg-primary text-primary-content w-50 text-sm button-slide self-center"
+                  >
+                    View All
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

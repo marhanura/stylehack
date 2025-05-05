@@ -42,34 +42,42 @@ export default function WishlistPage() {
   };
 
   return (
-    <div className="h-full bg-[#E7DFD1] pt-25 px-10 flex flex-col">
-      <h1 className="text-center mb-5">My Wishlist</h1>
-      <div className="grid grid-cols-3 gap-10">
-        {wishlists.map((wishlist) => (
-          <WishlistCard
-            key={wishlist._id.toString()}
-            data={wishlist}
-            onDelete={fetchWishlists}
-          />
-        ))}
-      </div>
-      <div className="join self-center mt-10">
-        <button
-          className="join-item btn"
-          disabled={currentPage === 1 ? true : false}
-          onClick={() => prevPage()}
-        >
-          «
-        </button>
-        <button className="join-item btn">Page {currentPage}</button>
-        <button
-          className="join-item btn"
-          disabled={currentPage === totalPage ? true : false}
-          onClick={() => nextPage()}
-        >
-          »
-        </button>
-      </div>
+    <div className="min-h-screen bg-[#E7DFD1] pt-25 px-10 flex flex-col">
+      <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
+        My Wishlist
+      </h1>
+      {wishlists.length === 0 ? (
+        <p className="text-center">No wishlist yet.</p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-3 gap-10">
+            {wishlists.map((wishlist) => (
+              <WishlistCard
+                key={wishlist._id.toString()}
+                data={wishlist}
+                onDelete={fetchWishlists}
+              />
+            ))}
+          </div>
+          <div className="join self-center mt-10">
+            <button
+              className="join-item btn"
+              disabled={currentPage === 1 ? true : false}
+              onClick={() => prevPage()}
+            >
+              «
+            </button>
+            <button className="join-item btn">Page {currentPage}</button>
+            <button
+              className="join-item btn"
+              disabled={currentPage === totalPage ? true : false}
+              onClick={() => nextPage()}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
