@@ -2,6 +2,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import Image1 from "@/../public/image1.webp";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 type Product = {
   category: string;
@@ -41,6 +42,9 @@ export default function RecommendationPage() {
       if (!rec.ok) throw new Error(recJson.message || "Recommend failed");
 
       console.log("AI result:", recJson);
+      // if(recJson === undefined){
+      //   throw new Error("Failed getting the recomendation from ai")
+      // }
       setResult(recJson.products);
     } catch (e: any) {
       alert(e.message);
@@ -99,12 +103,19 @@ export default function RecommendationPage() {
     }
   };
 
+  if(result === undefined){
+    Swal.fire({
+      title: "no recomendations",
+      icon: "error"
+    })
+    return 
+  }
   const renderTabContent = () => {
     switch (activeTab) {
       case "image":
         return (
           <div className="bg-[#E7DFD1] p-10 h-100 flex flex-col w-full">
-            {result.length === 0 ? (
+            {!result ? (
               <div>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">
@@ -160,7 +171,7 @@ export default function RecommendationPage() {
       case "destination":
         return (
           <div className="bg-[#E7DFD1] p-10 h-100 flex flex-col w-full">
-            {result.length === 0 ? (
+            {!result  ? (
               <div>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">
@@ -234,7 +245,7 @@ export default function RecommendationPage() {
       case "free":
         return (
           <div className="bg-[#E7DFD1] p-10 h-100 flex flex-col w-full">
-            {result.length === 0 ? (
+            {!result ? (
               <div>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">

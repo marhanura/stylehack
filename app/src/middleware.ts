@@ -6,6 +6,7 @@ import { JWSInvalid, JWSSignatureVerificationFailed } from "jose/errors";
 import { verifyToken } from "./db/helpers/jose";
 
 export async function middleware(request: NextRequest) {
+
   try {
     if (request.nextUrl.pathname.startsWith("/api")) {
       if (
