@@ -147,4 +147,10 @@ export default class RecomendationModel {
     }
     return recommendations[0];
   }
+
+  static async create(recommendation: IRecomendation) {
+    const col = this.getCollection();
+    const result = await col.insertOne(recommendation);
+    return result.insertedId;
+  }
 }
