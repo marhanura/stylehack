@@ -7,6 +7,7 @@ import Loading from "@/components/Loading";
 import Image from "next/image";
 import { IRecomendation } from "../../lookbook/[id]/page";
 import { IProduct } from "@/db/models/RecomendationModel";
+import Swal from "sweetalert2";
 
 interface IWishlist {
   _id: string;
@@ -34,28 +35,35 @@ export default function WishlistDetailPage({
     userId: "",
     recommendationId: "",
     recommendation: {
-      _id: '',
-      userId: '',
-      prompt: { type: "", input: "" },
-      products: []
-    },
-    extraRecommendation: {
-      _id: '',
-      userId: '',
+      _id: "",
+      userId: "",
       prompt: { type: "", input: "" },
       products: [],
-      recommendationId: ''
-    }
+    },
+    extraRecommendation: {
+      _id: "",
+      userId: "",
+      prompt: { type: "", input: "" },
+      products: [],
+      recommendationId: "",
+    },
   });
+  const [error, setError] = useState(false);
   useEffect(() => {
     const fetchWishlist = async () => {
       const { id } = await params;
       const res = await fetch(`http://localhost:3000/api/wishlists/${id}`);
-      const data = await res.json();
-      setWishlist(data);
+
       if (!res.ok) {
-        throw new Error(data.message);
+        Swal.fire({
+          title: "Not found",
+          icon: "error",
+        });
+        setError(true);
+        return;
       }
+      const data: IWishlist = await res.json();
+      setWishlist(data);
     };
     fetchWishlist();
   }, [params]);
@@ -63,7 +71,9 @@ export default function WishlistDetailPage({
     <div className="min-h-screen pt-25 px-10 mb-10">
       <div className="bg-[#E7DFD1] p-10 h-full flex flex-col">
         <h1 className="text-center mb-5">My Wishlist Detail</h1>
-        {wishlist.recommendation.products.length === 0 ? (
+        {error ? (
+          <h1>Error</h1>
+        ) : wishlist.recommendation.products.length === 0 ? (
           <Loading />
         ) : (
           <div className="flex flex-col gap-2">
