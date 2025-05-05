@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { IDetail } from "@/app/(auth)/lookbook/page";
 import Swal from "sweetalert2";
+import ProductPreview from "./ProductPreview";
+import { useEffect, useState } from "react";
 
 interface IStyleCard {
   data: IDetail;
@@ -10,6 +12,16 @@ interface IStyleCard {
 
 export default function RecsCard(data: IStyleCard) {
   const recommendation: IDetail = data.data;
+  const [selectedLink, setSelectedLink] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (
+      recommendation?.products?.length > 0 &&
+      recommendation.products[0].links?.length > 0
+    ) {
+      setSelectedLink(recommendation.products[0].links[0]);
+    }
+  }, [recommendation]);
 
   const addToWishlist = async (id: string) => {
     const res = await fetch("/api/wishlists", {
@@ -34,31 +46,39 @@ export default function RecsCard(data: IStyleCard) {
   };
 
   return (
-    <div className="card bg-base-100 h-100 w-full rounded-none">
-      {/* <figure>
-        <Image
-          src={Thumbnail}
-          alt="Shoes"
-          width={400}
-          height={300}
-          className="object-cover"
-        />
-      </figure> */}
+    <div className="card bg-base-100 h-full w-full rounded-none">
       <div className="card-body">
         <div className="badge badge-secondary">
           {recommendation.prompt.type}
         </div>
         <p className="card-title">{recommendation.prompt.input}</p>
+
+        {selectedLink && <ProductPreview url={selectedLink} />}
+
         {recommendation.products.map((product) => (
-          <div key={product.category}>
-            <p>
+          <div key={product.category} className="mb-3">
+            <p className="font-semibold">
               {product.category}: {product.name}
             </p>
-            <Link href={product.links[0]}>Product 1</Link> /
-            <Link href={product.links[1]}>Product 2</Link>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {product.links.map((link, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedLink(link)}
+                  className={`text-sm py-1 px-2 rounded ${
+                    selectedLink === link
+                      ? "bg-primary text-white"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  Product {index + 1}
+                </button>
+              ))}
+            </div>
           </div>
         ))}
-        <div className="card-actions justify-end">
+
+        <div className="card-actions justify-end mt-3">
           <Link href={`/lookbook/${recommendation._id}`} className="btn">
             See Detail
           </Link>

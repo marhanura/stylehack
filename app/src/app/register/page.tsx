@@ -11,6 +11,7 @@ export async function handleRegister(formData: FormData): Promise<void> {
   const email = formData.get("email");
   const password = formData.get("password");
   const gender = formData.get("gender");
+  const ageRange = formData.get("ageRange");
 
   const res = await fetch(`http://localhost:3000/api/register`, {
     method: "POST",
@@ -22,6 +23,7 @@ export async function handleRegister(formData: FormData): Promise<void> {
       email,
       password,
       gender,
+      ageRange,
     }),
   });
   if (!res.ok) {
@@ -71,6 +73,15 @@ export default async function RegisterPage(props: IProps) {
           <option value="">Select gender</option>
           <option value="female">Female</option>
           <option value="male">Male</option>
+        </select>
+        <select
+          className="select my-3 rounded-sm border-0 w-full max-w-xs"
+          name="ageRange"
+        >
+          <option value="">Select gender</option>
+          <option value="child">Child</option>
+          <option value="teenager">Teenager</option>
+          <option value="adult">Adult</option>
         </select>
         <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
           Register

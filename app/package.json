@@ -20,6 +20,7 @@
     "mongodb": "6.15",
     "mongoloquent": "^3.0.2",
     "next": "15.3.1",
+    "puppeteer": "^24.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sweetalert2": "^11.19.1",
