@@ -14,14 +14,17 @@ export async function callAiRecommendation(prompt: Prompt) {
     body: JSON.stringify(prompt),
   });
 
-  const data = await res.json();
-
+  
   if (!res.ok) {
     // API returned an error status
-    throw new CustomError(data.message || "AI service error", res.status);
+    const err = await res.json()
+    throw new CustomError(err.message || "AI service error", res.status);
   }
+  
+  const data = await res.json();
 
-  if (!Array.isArray(data.products)) {
+
+  if (!Array.isArray(data.products) || !data) {
     throw new CustomError("Invalid AI response");
   }
 
