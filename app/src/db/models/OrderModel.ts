@@ -87,7 +87,7 @@ export default class OrderModel {
         },
         body: JSON.stringify({
           transaction_details: {
-            order_id: `stylehackTEST-${orderId}`,
+            order_id: `stylehack-${orderId}`,
             gross_amount: 99000,
           },
           credit_card: {
