@@ -148,7 +148,7 @@ body {
   --bg-h: 100%;
   padding: 0 10px;
   text-align: center;
-  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
 }
 
 .text-hover:where(:hover, :focus-visible) {

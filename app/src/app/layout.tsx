@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${rubik.variable} ${bodoniModa.variable} ${bodoniModaSC.variable} antialiased`}
+        className={`${rubik.variable} ${bodoniModa.variable} ${bodoniModaSC.variable} antialiased h-screen`}
       >
         <Navbar />
         {children}

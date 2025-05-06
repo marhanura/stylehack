@@ -1,5 +1,8 @@
 import Image from "next/image";
 import MainImage from "../../public/main.png";
+import MainSide1 from "../../public/side1.webp";
+import MainSide2 from "../../public/side2.webp";
+import MainSide3 from "../../public/side3.webp";
 import Image2 from "../../public/image2.webp";
 import Image3 from "../../public/image3.webp";
 import Image4 from "../../public/image4.webp";
@@ -21,9 +24,29 @@ export default function Home() {
             alt="Main Image"
             className="mx-auto z-10"
           />
-          <p className="w-80 mb-10 italic text-lg border-l-2 border-primary p-5 bottom-0 self-end">
-            Fashion made easy, personalized, and effortless.
-          </p>
+          <div className="relative h-full top-0 flex flex-col justify-end">
+            <Image
+              src={MainSide1}
+              width={150}
+              alt="Main Side"
+              className="z-5 absolute top-10 border-5 border-b-30 border-white rotate-10 hover:rotate-15 transition-transform duration-300"
+            />
+            <Image
+              src={MainSide2}
+              width={150}
+              alt="Main Side"
+              className="z-10 absolute top-25 left-35 border-5 border-b-30 border-white -rotate-20 hover:-rotate-10 transition-transform duration-300"
+            />
+            <Image
+              src={MainSide3}
+              width={150}
+              alt="Main Side"
+              className="z-10 absolute top-45 border-5 border-b-30 border-white rotate-20 hover:rotate-10 transition-transform duration-300"
+            />
+            <p className="w-75 mb-10 text-right text-lg italic pr-5 mr-15 font-(family-name:--font-bodoni-moda)">
+              Fashion made easy, personalized, and effortless.
+            </p>
+          </div>
         </div>
       </div>
       <div className="h-full bg-[#e7dfd1] shadow-xl p-10 mx-10 flex flex-col justify-center">

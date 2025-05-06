@@ -122,7 +122,10 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
-              <p className="mt-5">Available tokens: {user.quota} token</p>
+              <p className="mt-5 text-center">
+                Available tokens:{" "}
+                <span className="font-bold">{user.quota}</span> token
+              </p>
               <div className="flex flex-row justify-between items-center w-full gap-3">
                 <Link
                   href="/order-history"

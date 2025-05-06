@@ -1,6 +1,6 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
-import Image1 from "@/../public/image1.webp";
+import { useState, ChangeEvent } from "react";
+import Image1 from "@/../public/side1.webp";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { generateRecommendation } from "./action";
