@@ -13,6 +13,7 @@ export interface IRecomendation {
   prompt: { type: string; input: string };
   products: IProduct[];
   extraRecommendation?: IExtraRecommendation;
+  isWishlisted: boolean;
 }
 
 interface IExtraRecommendation {
@@ -31,6 +32,7 @@ export default function RecDetailPage({
     userId: "",
     prompt: { type: "", input: "" },
     products: [],
+    isWishlisted: false,
   });
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -46,14 +48,13 @@ export default function RecDetailPage({
         });
         setError(true);
         return;
-        // const err: { message: string } = await res.json();
-        // throw new Error(err.message);
       }
       const data: IRecomendation = await res.json();
       setRecommendation(data);
     };
     fetchRecommendation();
   }, [params]);
+
 
   const recDetail = () => {
     return (
@@ -105,6 +106,7 @@ export default function RecDetailPage({
                 {product.category}
               </span>
               <span className="font-medium capitalize">{product.name}</span>
+
             </p>
             {product.links?.map((link, index) => (
               <Link

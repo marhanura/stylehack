@@ -13,6 +13,7 @@ export interface IRecomendation {
   prompt: IPrompt;
   products: IProduct[];
   extraRecommendation?: IExtraRecomendation;
+  isWishlisted: boolean;
 }
 
 export interface IProduct {
@@ -152,5 +153,23 @@ export default class RecomendationModel {
     const col = this.getCollection();
     const result = await col.insertOne(recommendation);
     return result.insertedId;
+  }
+
+  static async updateIsWishlisted(recommendationId: string) {
+    const col = this.getCollection();
+    const recommendation = await col.findOne(new ObjectId(recommendationId));
+    if (!recommendation) {
+      throw new CustomError("recommendation not found", 404);
+    }
+    await col.updateOne(
+      { _id: new ObjectId(recommendationId) },
+      {
+        $set: {
+          isWishlisted: !recommendation.isWishlisted,
+        },
+      }
+    );
+
+    return "Success update is wishlisted";
   }
 }

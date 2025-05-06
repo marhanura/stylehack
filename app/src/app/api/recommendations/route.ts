@@ -60,11 +60,13 @@ export async function GET(req: NextRequest) {
 //     if (!res.ok) throw new Error("AI service failed");
 //     const { products } = await res.json();
 
-//     await RecomendationModel.create({
-//       userId: new ObjectId(userId),
-//       prompt: { type, input },
-//       products,
-//     });
+
+//    await RecomendationModel.create({
+//     userId: new ObjectId(userId),
+//     prompt: { type, input },
+//      products,
+//      isWishlisted: false,
+//    });
 
 //     return NextResponse.json({ products });
 //   } catch (err: any) {
