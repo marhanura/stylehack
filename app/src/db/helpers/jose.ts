@@ -1,5 +1,4 @@
 import * as jose from "jose";
-import CustomError from "./CustomError";
 
 const secret = new TextEncoder().encode(process.env.SECRET_KEY_JWT);
 export async function signToken(payload: { _id: string; email: string }) {

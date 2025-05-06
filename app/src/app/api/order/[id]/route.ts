@@ -9,10 +9,11 @@ interface IParams {
 export async function GET(request: NextRequest, params: IParams) {
   try {
     const { id } = await params.params;
-    const order = await OrderModel.findOne({_id: new ObjectId(id)})
+    const order = await OrderModel.findOne({ _id: new ObjectId(id) });
 
-    return Response.json(order)
+    return Response.json(order);
   } catch (error) {
+    console.log(error);
     return Response.json({ message: "ISE" }, { status: 500 });
   }
 }
