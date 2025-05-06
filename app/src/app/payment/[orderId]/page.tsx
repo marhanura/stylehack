@@ -24,7 +24,7 @@ export default function PaymentPage({
   }, []);
 
   return (
-    <div className="h-screen pt-21">
+    <div className="h-full pt-21">
       <div className="flex justify-center py-5">
         {link && <iframe className="h-150 w-100" src={link} title=""></iframe>}
       </div>

@@ -83,6 +83,10 @@ export default function RecommendationPage() {
     }
   };
 
+  if (result && result.length > 0) {
+    router.push("/lookbook");
+  }
+
   if (result === undefined) {
     Swal.fire({
       title: "no recomendations",
@@ -287,17 +291,19 @@ export default function RecommendationPage() {
       </h1>
       <div className="flex flex-row items-end justify-between m-10">
         <div className="flex flex-col flex-2 justify-center items-start">
-          <div role="tablist" className="tabs tabs-lift">
+          <div role="tablist" className="tabs tabs-lift text-black">
             <a
               role="tab"
-              className={`tab ${activeTab === "image" ? "tab-active" : ""}`}
+              className={`tab text-black ${
+                activeTab === "image" ? "tab-active" : ""
+              }`}
               onClick={() => setActiveTab("image")}
             >
               Image
             </a>
             <a
               role="tab"
-              className={`tab ${
+              className={`tab text-black ${
                 activeTab === "destination" ? "tab-active" : ""
               }`}
               onClick={() => setActiveTab("destination")}
@@ -306,7 +312,9 @@ export default function RecommendationPage() {
             </a>
             <a
               role="tab"
-              className={`tab ${activeTab === "free" ? "tab-active" : ""}`}
+              className={`tab text-black ${
+                activeTab === "free" ? "tab-active" : ""
+              }`}
               onClick={() => setActiveTab("free")}
             >
               Free Text

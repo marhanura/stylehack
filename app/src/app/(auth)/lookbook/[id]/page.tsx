@@ -55,7 +55,6 @@ export default function RecDetailPage({
     fetchRecommendation();
   }, [params]);
 
-
   const recDetail = () => {
     return (
       <div>
@@ -106,7 +105,6 @@ export default function RecDetailPage({
                 {product.category}
               </span>
               <span className="font-medium capitalize">{product.name}</span>
-
             </p>
             {product.links?.map((link, index) => (
               <Link
@@ -133,7 +131,7 @@ export default function RecDetailPage({
       ) : (
         <div>
           {recommendation.prompt.input.includes("cloudinary") ? (
-            <div className="card lg:card-side bg-base-100 shadow-sm rounded-none">
+            <div className="card lg:card-side bg-base-100 shadow-sm rounded-none ">
               <figure className="w-100">
                 <Image
                   src={recommendation.prompt.input}
@@ -161,7 +159,7 @@ export default function RecDetailPage({
                 <p className="text-center text-lg mb-3">
                   Recommendation Detail
                 </p>
-                <p className="font-medium text-center text-xl mb-3">
+                <p className="font-medium text-center text-xl mb-3 capitalize">
                   {recommendation?.prompt.input}
                 </p>
                 {recDetail()}
