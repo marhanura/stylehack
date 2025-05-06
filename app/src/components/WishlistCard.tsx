@@ -48,7 +48,7 @@ export default function WishlistCard(props: IStyleCard) {
   return (
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
-        <div className="h-[400px] overflow-auto">
+        <div className="h-[400px] overflow-auto custom-scrollbar">
           <div className="badge badge-secondary">
             {wishlist.recommendation.prompt.type}
           </div>
@@ -86,7 +86,7 @@ export default function WishlistCard(props: IStyleCard) {
           ))}
         </div>
         <div className="card-actions justify-end">
-          <Link href={`/wishlist/${wishlist._id}`} className="btn">
+          <Link href={`/lookbook/${wishlist.recommendationId}`} className="btn">
             See Detail
           </Link>
           <button
