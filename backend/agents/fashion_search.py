@@ -61,7 +61,7 @@ class FashionSearchAgent:
             temperature=0,
             seed=42,
             top_p=0.002,
-            max_retries=10,
+            max_retries=15,
         )
 
         # Create a wrapper function to ensure search results are properly formatted as strings
@@ -83,7 +83,7 @@ class FashionSearchAgent:
             name="product_search_based_on_information",  # Modified name with underscores
             func=search_and_format,
             description=self.prompt,
-            max_retries=10,
+            max_retries=15,
             verbose=True,  # Set verbose to True for detailed output
             early_stopping_method="generate",  # Added early stopping method
         )
