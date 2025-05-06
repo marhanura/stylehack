@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { IDetail } from "@/app/(auth)/lookbook/page";
 import Swal from "sweetalert2";
 import { IRecomendation } from "@/app/(auth)/lookbook/[id]/page";
 
@@ -39,7 +38,7 @@ export default function RecsCard(data: IStyleCard) {
   return (
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
-        <div className="h-[400px] overflow-auto">
+        <div className="h-[400px] overflow-auto custom-scrollbar">
           <div className="badge badge-secondary">
             {recommendation.prompt.type}
           </div>

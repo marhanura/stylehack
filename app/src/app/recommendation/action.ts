@@ -23,7 +23,10 @@ export async function generateRecommendation(formData: FormData) {
   // 2) build prompt
   const type = formData.get("type") as Prompt["type"];
   const inputField = formData.get("input") as string | null;
-  if (!type || !inputField) throw new Error("Missing prompt");
+  // console.log(type, "<<tipe", inputField, "<<input")
+  if(type !== "image"){
+    if (!type || !inputField) throw new Error("Missing prompt");
+  }
   let input = inputField;
 
   // 3) if image, upload to Cloudinary
@@ -45,7 +48,7 @@ export async function generateRecommendation(formData: FormData) {
   }
 
   // 4) call AI via our Next API
-  const prompt: Prompt = { type, input };
+  const prompt: Prompt = { type, input: input as string };
   const products = await callAiRecommendation(prompt);
 
   // 5) save to Mongo

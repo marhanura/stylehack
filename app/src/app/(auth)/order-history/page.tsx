@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -13,6 +14,7 @@ export interface IOrder {
   paidAt: string;
 }
 export default function OrderHistoryPage() {
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [orders, setOrders] = useState<IOrder[]>([
@@ -38,6 +40,7 @@ export default function OrderHistoryPage() {
     const { data, totalPage } = await res.json();
     setTotalPage(totalPage);
     setOrders(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -45,16 +48,20 @@ export default function OrderHistoryPage() {
   }, [page]);
 
   return (
-    <div className="h-full pt-18">
-      <h2 className="font-bold text-xl text-center my-5">Payments History</h2>
+    <div className="min-h-screen pt-25">
+      <h2 className="font-bold text-2xl text-center my-5 font-(family-name:--font-bodoni-moda)">
+        Payment History
+      </h2>
       {orders.length === 0 ? (
         <p className="text-center my-5">No order yet.</p>
+      ) : loading ? (
+        <Loading />
       ) : (
         <div className="flex flex-col items-center justify-center">
           <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 w-3xl ">
             <table className="table">
               <thead>
-                <tr>
+                <tr className="text-center">
                   <th></th>
                   <th>Date</th>
                   <th>Status</th>
@@ -75,7 +82,6 @@ export default function OrderHistoryPage() {
                           year: "numeric",
                         })}
                       </td>
-
                       <td>
                         {e.status === "Paid" ? (
                           <p className="px-1.5 border-green-900 border-1 border-solid py-0.5 bg-green-200 rounded-md w-max text-green-900">
@@ -97,7 +103,7 @@ export default function OrderHistoryPage() {
                           e.status
                         )}
                       </td>
-                      <td>Rp.{e.amount}</td>
+                      <td>Rp {e.amount.toLocaleString("id-ID")}</td>
                       <td>
                         {e.status === "Paid"
                           ? `${new Date(e.paidAt).toLocaleDateString("en-GB", {
@@ -131,7 +137,7 @@ export default function OrderHistoryPage() {
               </tbody>
             </table>
           </div>
-          <div className="join flex justify-center mt-3 mb-3">
+          <div className="join flex justify-center mt-10">
             <button
               className="join-item btn"
               onClick={() => setPage(page - 1)}

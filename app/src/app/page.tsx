@@ -11,15 +11,9 @@ export default function Home() {
       <div className="h-screen flex flex-col items-end justify-end relative">
         <div className="w-full relative flex flex-row items-center justify-end bottom-0">
           <div className="ml-15 text-[72px] font-(family-name:--font-bodoni-moda) uppercase tracking-wider font-bold z-0">
-            <p className="opacity-90 hover:opacity-100 transition-all duration-300">
-              HACK
-            </p>
-            <p className="opacity-90 hover:opacity-100 transition-all duration-300 ml-10">
-              YOUR
-            </p>
-            <p className="opacity-90 hover:opacity-100 transition-all duration-300 ml-20">
-              STYLE
-            </p>
+            <p className="text-hover">HACK</p>
+            <p className="text-hover">YOUR</p>
+            <p className="text-hover">STYLE</p>
           </div>
           <Image
             src={MainImage}

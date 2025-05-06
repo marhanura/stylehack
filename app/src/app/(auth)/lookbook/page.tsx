@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 export interface IDetail {
   _id: ObjectId;
   userId: ObjectId;
+  recommendationId?: ObjectId;
   recommendation: IRecomendation;
   prompt: IPrompt;
   extraRecommendation?: IExtraRecomendation;
