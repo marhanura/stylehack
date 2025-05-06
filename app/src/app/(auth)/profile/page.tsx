@@ -7,10 +7,43 @@ import AvatarMale from "@/../public/avatar_male.png";
 import { removeToken } from "../../../../actions";
 import Swal from "sweetalert2";
 import { IUser } from "@/db/models/UserModel";
-// import { IDetail } from "../lookbook/page";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 import { IDetail } from "../lookbook/[id]/layout";
+
+interface Product {
+  category: string;
+  name: string;
+  links: string[];
+}
+
+interface Prompt {
+  type: string;
+  input: string;
+}
+
+interface Recommendation {
+  _id: string;
+  userId: string;
+  products: Product[];
+  prompt: Prompt;
+}
+
+interface ExtraRecommendation {
+  _id: string;
+  userId: string;
+  products: Product[];
+  prompt: Prompt;
+  recommendationId: string;
+}
+
+interface IWishlist {
+  _id: string;
+  userId: string;
+  recommendationId: string;
+  recommendation: Recommendation;
+  extraRecommendation: ExtraRecommendation;
+}
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -43,7 +76,7 @@ export default function ProfilePage() {
     ageRange: "",
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
-  const [wishlist, setWishlist] = useState<IDetail[]>([]);
+  const [wishlist, setWishlist] = useState<IWishlist[]>([]);
 
   useEffect(() => {
     const fetchUser = async () => {
