@@ -1,14 +1,19 @@
+import json
+import re
+
 from .fashion_search import FashionSearchAgent
 from .outfit_describer import OutfitDescriber
-import json
+from .fashion_search_for_image import FashionSearchAgentforimage
+
 
 class FashionAppAgent:
     def __init__(self):
         self.fashion_search_agent = FashionSearchAgent()
         self.outfit_describer = OutfitDescriber()
+        self.FashionSearchAgentforimage = FashionSearchAgentforimage()
 
     def check_input_image_or_event(self, user_input):
-        if user_input.lower().endswith(('.jpg', '.jpeg', '.png')):
+        if user_input.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
             return "image"
         else:
             return "event"
@@ -21,15 +26,16 @@ class FashionAppAgent:
                 # First get description from image
                 outfit_description = self.outfit_describer.describe_outfit(user_input)
                 # Then search for products based on that description
-                result = self.fashion_search_agent.search(outfit_description)
+                result = self.FashionSearchAgentforimage.search(outfit_description)
             else:
                 outfit_description = user_input  # anggap input teks adalah deskripsi
                 result = self.fashion_search_agent.search(user_input)
-
-            return json.loads(result)
+            print(result)
+            fixed_data = re.sub(r',(\s*)]', r'\1]', result)
+            data_dict = json.loads(fixed_data)
+            return data_dict
 
         except Exception as e:
-            print(f"Error: {e}")
-            return e
+            raise e
 
 Agent = FashionAppAgent()
