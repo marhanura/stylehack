@@ -28,14 +28,14 @@ export async function generateMetadata(props: IParams): Promise<Metadata> {
     const product: IDetail = await res.json();
     if (product.prompt.type === "image") {
       return {
-        title: `Style by image - StyleHack`,
+        title: `Your Recommendation - StyleHack`,
         openGraph: {
           images: [product.prompt.input],
         },
       };
     } else {
       return {
-        title: `Style by ${product.prompt.type} - StyleHack`,
+        title: `Your Recommendation - StyleHack`,
         description: product.prompt.input,
       };
     }

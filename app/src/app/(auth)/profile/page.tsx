@@ -12,11 +12,12 @@ import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 
 export default function ProfilePage() {
+  const [loading, setLoading] = useState(true);
+  const [tokenLoading, setTokenLoading] = useState(false);
   const router = useRouter();
 
   const handleBuy = async () => {
-    console.log("belibro");
-
+    setTokenLoading(true);
     const resp = await fetch(`http://localhost:3000/api/order`, {
       method: "POST",
     });
@@ -28,6 +29,7 @@ export default function ProfilePage() {
       return;
     }
     const data: { orderId: string } = await resp.json();
+    setTokenLoading(false);
     router.push(`/payment/${data.orderId}`);
   };
 
@@ -41,7 +43,6 @@ export default function ProfilePage() {
   });
   const [lookbook, setLookbook] = useState<IDetail[]>([]);
   const [wishlist, setWishlist] = useState<IDetail[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -62,6 +63,7 @@ export default function ProfilePage() {
       setWishlist(data.data);
       setLoading(false);
     };
+
     const fetchRecommendations = async () => {
       const res = await fetch(`http://localhost:3000/api/recommendations`);
       const data = await res.json();
@@ -97,7 +99,9 @@ export default function ProfilePage() {
     <div className="min-h-full flex flex-row pt-25 px-5 pb-10">
       <div className="flex-1 flex flex-col justify-between items-center p-5">
         <div className="bg-[#E7DFD1] w-full h-100 p-10 flex flex-col">
-          <h1 className="text-center mb-5 font-bold">Profile</h1>
+          <h1 className="text-center mb-5 font-bold font-(family-name:--font-bodoni-moda) text-xl">
+            Profile
+          </h1>
           {loading && <Loading />}
           <div className="flex flex-row justify-center items-center h-full">
             <div className="flex-1 flex flex-col justify-between min-h-full gap-2 w-full">
@@ -138,19 +142,23 @@ export default function ProfilePage() {
                 </button>
               </div>
               <dialog id="buy_token" className="modal">
-                <div className="modal-box rounded-none">
-                  <h3 className="font-bold text-lg">Buy Token</h3>
-                  <p className="font-bold text-lg">Rp. 99.000</p>
-                  <p className="py-4">Get 10 tokens for only Rp. 99.000!</p>
-                  <div className="modal-action flex justify-between">
-                    <button className="button-slide" onClick={handleBuy}>
-                      Buy Token
-                    </button>
-                    <form method="dialog">
-                      <button className="button-slide">Cancel</button>
-                    </form>
+                {tokenLoading ? (
+                  <Loading />
+                ) : (
+                  <div className="modal-box rounded-none">
+                    <h3 className="font-bold text-lg">Buy Token</h3>
+                    <p className="py-4">Get 10 tokens for Rp. 99.000!</p>
+                    <p>You can create your style only for 1 token.</p>
+                    <div className="modal-action flex justify-between">
+                      <button className="button-slide" onClick={handleBuy}>
+                        Buy Token
+                      </button>
+                      <form method="dialog">
+                        <button className="button-slide">Cancel</button>
+                      </form>
+                    </div>
                   </div>
-                </div>
+                )}
               </dialog>
               <button className="button-slide text-sm " onClick={handleLogout}>
                 Log Out
@@ -161,7 +169,9 @@ export default function ProfilePage() {
       </div>
       <div className="flex-1 flex flex-col justify-between items-center p-5">
         <div className="bg-[#E7DFD1] w-full h-100 py-10 flex flex-col items-center justify-between">
-          <h1 className="font-bold text-center flex-1">Style Lookbook</h1>
+          <h1 className="font-bold text-center flex-1 font-(family-name:--font-bodoni-moda) text-xl">
+            My Lookbook
+          </h1>
           {loading ? (
             <Loading />
           ) : (
@@ -209,7 +219,9 @@ export default function ProfilePage() {
       </div>
       <div className="flex-1 flex flex-col justify-between items-center p-5">
         <div className="bg-[#E7DFD1] w-full h-100 py-10 flex flex-col items-center justify-between">
-          <h1 className="font-bold text-center flex-1">Style Wishlist</h1>
+          <h1 className="font-bold text-center flex-1 font-(family-name:--font-bodoni-moda) text-xl">
+            My Wishlist
+          </h1>
           {loading ? (
             <Loading />
           ) : (
