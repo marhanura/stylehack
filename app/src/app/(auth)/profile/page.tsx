@@ -102,72 +102,80 @@ export default function ProfilePage() {
           <h1 className="text-center mb-5 font-bold font-(family-name:--font-bodoni-moda) text-xl">
             Profile
           </h1>
-          {loading && <Loading />}
-          <div className="flex flex-row justify-center items-center h-full">
-            <div className="flex-1 flex flex-col justify-between min-h-full gap-2 w-full">
-              <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
-                <div className="bg-neutral text-neutral-content w-34 rounded-full">
-                  <Image
-                    src={user.gender === "female" ? AvatarFemale : AvatarMale}
-                    alt="Avatar"
-                    width={100}
-                    className="rounded-full"
-                  />
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="flex flex-row justify-center items-center h-full">
+              <div className="flex-1 flex flex-col justify-between min-h-full gap-2 w-full">
+                <div className="avatar avatar-placeholder flex flex-row gap-3 h-24">
+                  <div className="bg-neutral text-neutral-content w-34 rounded-full">
+                    <Image
+                      src={user.gender === "female" ? AvatarFemale : AvatarMale}
+                      alt="Avatar"
+                      width={100}
+                      className="rounded-full"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-start items-start w-full">
+                    <h1 className="text-left w-full">{user.name}</h1>
+                    <p className="text-left w-full">{user.email}</p>
+                    <p className="text-left w-full capitalize">
+                      {user.gender} - {user.ageRange}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col justify-start items-start w-full">
-                  <h1 className="text-left w-full">{user.name}</h1>
-                  <p className="text-left w-full">{user.email}</p>
-                  <p className="text-left w-full capitalize">
-                    {user.gender} - {user.ageRange}
-                  </p>
+                <p className="mt-5 text-center">
+                  Available tokens:{" "}
+                  <span className="font-bold">{user.quota}</span> token
+                </p>
+                <div className="flex flex-row justify-between items-center w-full gap-3">
+                  <Link
+                    href="/order-history"
+                    className="button-slide flex-1 text-sm "
+                  >
+                    My Order
+                  </Link>
+                  <button
+                    className="button-slide flex-1 text-sm "
+                    onClick={() =>
+                      (
+                        document.getElementById(
+                          "buy_token"
+                        ) as HTMLDialogElement
+                      )?.showModal()
+                    }
+                  >
+                    Buy Token
+                  </button>
                 </div>
-              </div>
-              <p className="mt-5 text-center">
-                Available tokens:{" "}
-                <span className="font-bold">{user.quota}</span> token
-              </p>
-              <div className="flex flex-row justify-between items-center w-full gap-3">
-                <Link
-                  href="/order-history"
-                  className="button-slide flex-1 text-sm "
-                >
-                  My Order
-                </Link>
+                <dialog id="buy_token" className="modal">
+                  {tokenLoading ? (
+                    <Loading />
+                  ) : (
+                    <div className="modal-box rounded-none">
+                      <h3 className="font-bold text-lg">Buy Token</h3>
+                      <p className="py-4">Get 10 tokens for Rp. 99.000!</p>
+                      <p>You can create your style only for 1 token.</p>
+                      <div className="modal-action flex justify-between">
+                        <button className="button-slide" onClick={handleBuy}>
+                          Buy Token
+                        </button>
+                        <form method="dialog">
+                          <button className="button-slide">Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+                </dialog>
                 <button
-                  className="button-slide flex-1 text-sm "
-                  onClick={() =>
-                    (
-                      document.getElementById("buy_token") as HTMLDialogElement
-                    )?.showModal()
-                  }
+                  className="button-slide text-sm "
+                  onClick={handleLogout}
                 >
-                  Buy Token
+                  Log Out
                 </button>
               </div>
-              <dialog id="buy_token" className="modal">
-                {tokenLoading ? (
-                  <Loading />
-                ) : (
-                  <div className="modal-box rounded-none">
-                    <h3 className="font-bold text-lg">Buy Token</h3>
-                    <p className="py-4">Get 10 tokens for Rp. 99.000!</p>
-                    <p>You can create your style only for 1 token.</p>
-                    <div className="modal-action flex justify-between">
-                      <button className="button-slide" onClick={handleBuy}>
-                        Buy Token
-                      </button>
-                      <form method="dialog">
-                        <button className="button-slide">Cancel</button>
-                      </form>
-                    </div>
-                  </div>
-                )}
-              </dialog>
-              <button className="button-slide text-sm " onClick={handleLogout}>
-                Log Out
-              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <div className="flex-1 flex flex-col justify-between items-center p-5">
@@ -236,7 +244,7 @@ export default function ProfilePage() {
                   <div className="flex flex-row gap-2 justify-center items-center">
                     {wishlist.slice(0, 3).map((item) => (
                       <Link
-                        href={`/wishlist/${item._id.toString()}`}
+                        href={`/lookbook/${item.recommendationId.toString()}`}
                         className="bg-white p-1 my-3 text-center justify-center items-center"
                         key={item._id.toString()}
                       >

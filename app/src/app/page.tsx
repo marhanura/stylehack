@@ -24,26 +24,29 @@ export default function Home() {
             alt="Main Image"
             className="mx-auto z-10"
           />
-          <div className="relative h-full top-0 flex flex-col justify-end">
-            <Image
-              src={MainSide1}
-              width={150}
-              alt="Main Side"
-              className="z-5 absolute top-10 border-5 border-b-30 border-white rotate-10 hover:rotate-15 transition-transform duration-300"
-            />
-            <Image
-              src={MainSide2}
-              width={150}
-              alt="Main Side"
-              className="z-10 absolute top-25 left-35 border-5 border-b-30 border-white -rotate-20 hover:-rotate-10 transition-transform duration-300"
-            />
-            <Image
-              src={MainSide3}
-              width={150}
-              alt="Main Side"
-              className="z-10 absolute top-45 border-5 border-b-30 border-white rotate-20 hover:rotate-10 transition-transform duration-300"
-            />
-            <p className="w-75 mb-10 text-right text-lg italic pr-5 mr-15 font-(family-name:--font-bodoni-moda)">
+          <div className="relative h-full top-0 flex flex-col justify-between">
+            <div>
+              <Image
+                src={MainSide1}
+                width={150}
+                alt="Main Side"
+                className="z-5 absolute top-10 border-5 border-b-30 border-white rotate-10 hover:rotate-15 transition-transform duration-300"
+              />
+              <Image
+                src={MainSide2}
+                width={150}
+                alt="Main Side"
+                className="z-10 absolute top-25 left-35 border-5 border-b-30 border-white -rotate-20 hover:-rotate-10 transition-transform duration-300"
+              />
+              <Image
+                src={MainSide3}
+                width={150}
+                alt="Main Side"
+                className="z-10 absolute top-45 border-5 border-b-30 border-white rotate-20 hover:rotate-10 transition-transform duration-300"
+              />
+            </div>
+
+            <p className="w-75 mb-10 text-right text-lg italic bottom-0 pr-5 mr-15 font-(family-name:--font-bodoni-moda)">
               Fashion made easy, personalized, and effortless.
             </p>
           </div>

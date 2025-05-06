@@ -57,25 +57,13 @@ export default function RecsCard(data: IStyleCard) {
             </p>
           )}
           {recommendation.products?.map((product, index: number) => (
-            <div key={index} className="mb-3">
+            <div key={index} className="flex flex-col gap-3">
               <p className="text-sm my-2">
                 <span className="badge badge-accent border-none mr-2">
                   {product.category}
                 </span>
-                <span className="font-medium">{product.name}</span>
+                <span className="capitalize">{product.name}</span>
               </p>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {product.links?.map((link: string, index: number) => (
-                  <Link
-                    key={index}
-                    className="text-sm py-1 p-2 underline"
-                    href={link}
-                    target="_blank"
-                  >
-                    Product {index + 1}
-                  </Link>
-                ))}
-              </div>
             </div>
           ))}
         </div>

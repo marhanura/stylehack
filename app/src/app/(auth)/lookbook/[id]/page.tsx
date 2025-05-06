@@ -89,7 +89,7 @@ export default function RecDetailPage({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-4"
           >
             <path
               strokeLinecap="round"
@@ -140,7 +140,7 @@ export default function RecDetailPage({
                   height={200}
                 />
               </figure>
-              <div className="card-body w-full p-10">
+              <div className="w-full p-10 flex flex-col justify-start gap-3">
                 <p className="badge badge-secondary self-center">
                   {recommendation?.prompt.type}
                 </p>
