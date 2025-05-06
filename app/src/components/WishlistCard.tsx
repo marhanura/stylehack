@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IDetail } from "@/app/(auth)/lookbook/page";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { IDetail } from "@/app/(auth)/lookbook/[id]/layout";
 
 export interface IStyleCard {
   data: IDetail;

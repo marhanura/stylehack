@@ -15,35 +15,33 @@ interface IBody {
 
 export async function POST(request: NextRequest) {
   const body: IBody = await request.json();
-  // console.log(body, "<<<<<<<<body");
+  console.log(body, "<<<<<<<<body");
   try {
     if (
       body.transaction_status !== "settlement" &&
-      body.transaction_status !== "capture" && 
+      body.transaction_status !== "capture" &&
       body.transaction_status !== "pending"
     ) {
       throw new CustomError("Status not right", 400);
     }
 
-    
     if (!body.order_id) {
-        throw new CustomError("orderId required", 400);
+      throw new CustomError("orderId required", 400);
     }
-    
+
     const order = await OrderModel.findOne({
-        _id: new ObjectId(body.order_id.split("-")[1]),
+      _id: new ObjectId(body.order_id.split("-")[1]),
     });
 
-    
     if (!order) {
-        throw new CustomError("order not found", 404);
+      throw new CustomError("order not found", 404);
     }
-    
-    if(body.transaction_status === "pending"){
-        await OrderModel.updateStatusPending(order._id)
-        return Response.json({message: 'oke bang'}, {status: 200})
+
+    if (body.transaction_status === "pending") {
+      await OrderModel.updateStatusPending(order._id);
+      return Response.json({ message: "oke bang" }, { status: 200 });
     }
-    
+
     if (!body.gross_amount) {
       throw new CustomError("Gross amount required", 400);
     }
@@ -73,25 +71,21 @@ export async function POST(request: NextRequest) {
       throw new CustomError("sk not match", 401);
     }
 
-    const userCollection = UserModel.getCollection()
+    const userCollection = UserModel.getCollection();
 
-    const user = await userCollection.findOne({_id: order.userId})
+    const user = await userCollection.findOne({ _id: order.userId });
 
-    if(!user){
-        throw new CustomError("user not found", 404)
+    if (!user) {
+      throw new CustomError("user not found", 404);
     }
 
-    if(!user.quota){
-        throw new CustomError("quota user not found")
-    }
+    await UserModel.addQuota(order.userId, user.quota + 10);
 
-    await UserModel.addQuota(order.userId, user.quota + 10)
-
-    await OrderModel.updateStatusPaid(order._id)
+    await OrderModel.updateStatusPaid(order._id);
 
     return Response.json({ message: "success", order }, { status: 200 });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     if (error instanceof CustomError) {
       return Response.json(
         { message: error.message },
