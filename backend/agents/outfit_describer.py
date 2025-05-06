@@ -5,9 +5,11 @@ from io import BytesIO
 from dotenv import load_dotenv
 from groq import Groq
 
+load_dotenv()
+
 class OutfitDescriber:
     def __init__(self, model="meta-llama/llama-4-scout-17b-16e-instruct", temperature=0, top_p=0.002, seed=42):
-        load_dotenv()
+
         self.client = Groq()
         self.model = model
         self.temperature = temperature
@@ -41,10 +43,24 @@ class OutfitDescriber:
                             "type": "text",
                             "text": ("""
                                 - Describe the outfit components in the image, and the gender of the person.
-                                - Provide the description in a single paragraph, without using lists or headings.
+                                - Provide the description in a single short paragraph, without using lists or headings.
                                 - Include details about: Top, Bottom, Footwear, Head Accessories, Accessories, Bags
-                                - If the item is not present, do not include it in the description.
-                                - Provide the basic color each item without pattern, and the brand if possible."""
+                                - If the item is not present, do not include or mention it in the description.
+                                - Provide the basic color each item without pattern, and the brand if possible.
+                                - Do not talk about missing items or overall color palette.
+                                - Do not include any other information or context about the image.
+                                - DO NOT PROVIDE A JSON OBJECT OR ANY OTHER FORMATTING.
+                                - DO NOT INCLUDE EXPLANATIONS LIKE "She is not wearing" or "He is not wearing.
+
+                                Output format (key dan value hanya ditulis jika ada value, jika tidak ada value tulis none):
+                                - gender: <gender>,
+                                - Top: <top description>,
+                                - Bottom: <bottom description>,
+                                - Footwear: <footwear description>,
+                                - Head Accessories: <head accessories description>,
+                                - Accessories: <accessories description>,
+                                - Bags: <bags description>
+                                """
                             ),
                         },
                         {
@@ -62,5 +78,13 @@ class OutfitDescriber:
             seed=self.seed,
         )
 
-        print('image desc',response.choices[0].message.content)
-        return response.choices[0].message.content
+        text = response.choices[0].message.content
+        # Membagi teks menjadi baris-baris
+        lines = text.split('\n')
+
+        # Menyaring baris yang tidak mengandung "none"
+        filtered_lines = [line for line in lines if "none" not in line.lower()]
+
+        # Menggabungkan kembali baris-baris yang tersisa
+        result = '\n'.join(filtered_lines)
+        return result
