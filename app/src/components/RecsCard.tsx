@@ -52,7 +52,9 @@ export default function RecsCard(data: IStyleCard) {
               style={{ width: "200px", height: "300px" }}
             />
           ) : (
-            <p className="my-3 text-lg">{recommendation.prompt.input}</p>
+            <p className="my-3 text-lg capitalize">
+              {recommendation.prompt.input}
+            </p>
           )}
           {recommendation.products?.map((product, index: number) => (
             <div key={index} className="mb-3">
@@ -82,14 +84,12 @@ export default function RecsCard(data: IStyleCard) {
             See Detail
           </Link>
           <button
-            className={`btn btn-accent ${
-              recommendation.isWishlisted ? "bg-purple-500" : ""
-            }`}
+            className="btn btn-accent "
             onClick={() => addToWishlist(recommendation._id.toString())}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              fill={recommendation.isWishlisted ? "currentColor" : "none"}
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"

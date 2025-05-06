@@ -62,7 +62,9 @@ export default function WishlistCard(props: IStyleCard) {
               style={{ width: "200px", height: "300px" }}
             />
           ) : (
-            <p className="my-2">{wishlist.recommendation.prompt.input}</p>
+            <p className="my-2 capitalize">
+              {wishlist.recommendation.prompt.input}
+            </p>
           )}
           {wishlist.recommendation.products?.map((product, index) => (
             <div key={index}>

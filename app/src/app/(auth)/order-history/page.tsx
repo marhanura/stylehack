@@ -137,24 +137,26 @@ export default function OrderHistoryPage() {
               </tbody>
             </table>
           </div>
-          <div className="join flex justify-center mt-10">
-            <button
-              className="join-item btn"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
-              «
-            </button>
+          {totalPage > 1 && (
+            <div className="join flex justify-center mt-10">
+              <button
+                className="join-item btn"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+              >
+                «
+              </button>
 
-            <button className="join-item btn">Page {page}</button>
-            <button
-              className="join-item btn"
-              onClick={() => setPage(page + 1)}
-              disabled={page === totalPage}
-            >
-              »
-            </button>
-          </div>
+              <button className="join-item btn">Page {page}</button>
+              <button
+                className="join-item btn"
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPage}
+              >
+                »
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
