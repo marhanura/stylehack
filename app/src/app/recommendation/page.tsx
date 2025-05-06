@@ -35,7 +35,8 @@ export default function RecommendationPage() {
       form.append("type", "image");
       form.append("input", "");
       form.append("file", file);
-      const products = await generateRecommendation(form);
+      const { insertedId, products } = await generateRecommendation(form);
+      router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: any) {
       handleError(e.message);
@@ -53,7 +54,8 @@ export default function RecommendationPage() {
       const form = new FormData();
       form.append("type", "destination");
       form.append("input", `${destination} ${style}`);
-      const products = await generateRecommendation(form);
+      const { insertedId, products } = await generateRecommendation(form);
+      router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: any) {
       handleError(e.message);
@@ -71,7 +73,8 @@ export default function RecommendationPage() {
       const form = new FormData();
       form.append("type", "free-text");
       form.append("input", freeText);
-      const products = await generateRecommendation(form);
+      const { insertedId, products } = await generateRecommendation(form);
+      router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: any) {
       handleError(e.message);
@@ -82,10 +85,6 @@ export default function RecommendationPage() {
       setLoading(false);
     }
   };
-
-  if (result && result.length > 0) {
-    router.push("/lookbook");
-  }
 
   if (result === undefined) {
     Swal.fire({

@@ -123,10 +123,10 @@ export default function RecDetailPage({
   };
 
   return (
-    <div className="min-h-full pt-25 px-25 mb-10">
+    <div className="min-h-screen pt-25 px-25 mb-10">
       {error ? (
         <h1>Error</h1>
-      ) : recommendation.products.length === 0 ? (
+      ) : recommendation.products?.length === 0 ? (
         <Loading />
       ) : (
         <div>

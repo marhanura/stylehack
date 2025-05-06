@@ -24,10 +24,11 @@ export async function generateRecommendation(formData: FormData) {
   const type = formData.get("type") as Prompt["type"];
   const inputField = formData.get("input") as string | null;
   // console.log(type, "<<tipe", inputField, "<<input")
-  if(type !== "image"){
+  if (type !== "image") {
     if (!type || !inputField) throw new Error("Missing prompt");
   }
-  let input = `${user.gender}, ${user.ageRange}, ${inputField}`;
+
+  let imageUrl = "";
 
   // 3) if image, upload to Cloudinary
   if (type === "image") {
@@ -44,22 +45,36 @@ export async function generateRecommendation(formData: FormData) {
       );
       stream.end(buffer);
     });
-    input = upload.secure_url;
+    imageUrl = upload.secure_url;
   }
 
   // 4) call AI via our Next API
-  const prompt: Prompt = { type, input: input as string };
+  let prompt: Prompt;
+  if (type === "image") {
+    prompt = {
+      type,
+      input: imageUrl,
+    };
+  } else {
+    prompt = {
+      type,
+      input: `${user.gender}, ${user.ageRange}, ${inputField}`,
+    };
+  }
   const products = await callAiRecommendation(prompt);
 
   // 5) save to Mongo
-  await RecommendationModel.create({
+  const insertedId = await RecommendationModel.create({
     userId: new ObjectId(userId),
-    prompt,
+    prompt: {
+      type,
+      input: type === "image" ? imageUrl : (inputField as string),
+    },
     products,
     isWishlisted: false,
   });
 
   await UserModel.decreaseQuota(new ObjectId(userId));
 
-  return products;
+  return { insertedId: insertedId.toString(), products };
 }
