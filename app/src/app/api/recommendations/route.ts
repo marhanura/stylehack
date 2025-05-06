@@ -3,9 +3,6 @@ import RecomendationModel from "@/db/models/RecomendationModel";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 export const dynamic = "force-dynamic";
-import { verifyToken } from "@/db/helpers/jose";
-import { ObjectId } from "mongodb";
-import { callAiRecommendation } from "@/db/helpers/aiHelpers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -59,7 +56,6 @@ export async function GET(req: NextRequest) {
 //     );
 //     if (!res.ok) throw new Error("AI service failed");
 //     const { products } = await res.json();
-
 
 //    await RecomendationModel.create({
 //     userId: new ObjectId(userId),

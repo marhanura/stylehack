@@ -35,16 +35,18 @@ export async function generateRecommendation(formData: FormData) {
     const file = formData.get("file") as File | null;
     if (!file) throw new Error("No file uploaded");
     const buffer = Buffer.from(await file.arrayBuffer());
-    const upload = await new Promise<any>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto" },
-        (err, res) => {
-          if (err) reject(err);
-          else resolve(res);
-        }
-      );
-      stream.end(buffer);
-    });
+    const upload = await new Promise<{ secure_url: string }>(
+      (resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (err, res) => {
+            if (err) reject(err);
+            else resolve(res as { secure_url: string });
+          }
+        );
+        stream.end(buffer);
+      }
+    );
     imageUrl = upload.secure_url;
   }
 

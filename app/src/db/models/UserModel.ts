@@ -37,7 +37,7 @@ export default class UserModel {
   static async register(payload: IUser): Promise<string> {
     const collection = this.getCollection();
 
-    let user = await collection.findOne({ email: payload.email });
+    const user = await collection.findOne({ email: payload.email });
     if (user) {
       throw new CustomError("Email must be unique", 400);
     }
