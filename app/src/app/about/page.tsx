@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function AboutPage() {
   return (
     <div className="h-screen pt-25 ">
-      <h2 className="font-bold text-xl text-center mb-10">
+      <h2 className="font-bold text-2xl text-center mb-10 font-(family-name:--font-bodoni-moda)">
         Team Andrew & The Backbone
       </h2>
       <div className="px-10 h-100 flex flex-row gap-10 items-center justify-center">

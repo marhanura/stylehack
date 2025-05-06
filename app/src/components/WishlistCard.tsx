@@ -48,7 +48,7 @@ export default function WishlistCard(props: IStyleCard) {
   return (
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
-        <div className="h-[400px] overflow-auto custom-scrollbar">
+        <div className="h-[400px] overflow-auto">
           <div className="badge badge-secondary">
             {wishlist.recommendation.prompt.type}
           </div>
@@ -62,33 +62,21 @@ export default function WishlistCard(props: IStyleCard) {
               style={{ width: "200px", height: "300px" }}
             />
           ) : (
-            <p className="my-2 capitalize">
-              {wishlist.recommendation.prompt.input}
-            </p>
+            <p className="my-2">{wishlist.recommendation.prompt.input}</p>
           )}
           {wishlist.recommendation.products?.map((product, index) => (
-            <div key={index}>
+            <div key={index} className="flex flex-col gap-3">
               <p className="text-sm my-2">
                 <span className="badge badge-accent border-none mr-2">
                   {product.category}
                 </span>
-                <span className="font-medium">{product.name}</span>
+                <span className="capitalize">{product.name}</span>
               </p>
-              {product.links?.map((link, index) => (
-                <Link
-                  key={index}
-                  className="text-sm py-1 p-2 underline"
-                  href={link}
-                  target="_blank"
-                >
-                  Product {index + 1}
-                </Link>
-              ))}
             </div>
           ))}
         </div>
         <div className="card-actions justify-end">
-          <Link href={`/lookbook/${wishlist.recommendationId}`} className="btn">
+          <Link href={`/wishlist/${wishlist._id}`} className="btn">
             See Detail
           </Link>
           <button
