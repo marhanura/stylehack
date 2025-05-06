@@ -1,4 +1,5 @@
 import CustomError from "@/db/helpers/CustomError";
+import RecomendationModel from "@/db/models/RecomendationModel";
 import WishlistModel from "@/db/models/WishlistModel";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
       createdAt: new Date().toISOString(),
       updateAt: new Date().toISOString(),
     });
+    await RecomendationModel.updateIsWishlisted(recommendationId);
 
     return NextResponse.json({ message }, { status: 201 });
   } catch (err: unknown) {

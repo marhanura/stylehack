@@ -53,6 +53,7 @@ export async function generateRecommendation(formData: FormData) {
     userId: new ObjectId(userId),
     prompt,
     products,
+    isWishlisted: false,
   });
 
   await UserModel.decreaseQuota(new ObjectId(userId));

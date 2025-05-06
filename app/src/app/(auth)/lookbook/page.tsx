@@ -63,6 +63,7 @@ export default function LookbookPage() {
               <RecsCard
                 key={recommendation._id.toString()}
                 data={recommendation}
+                fetchRecommendation={fetchRecommendations}
               />
             ))}
           </div>

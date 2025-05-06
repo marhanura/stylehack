@@ -7,6 +7,7 @@ import { IRecomendation } from "@/app/(auth)/lookbook/[id]/page";
 
 interface IStyleCard {
   data: IRecomendation;
+  fetchRecommendation: () => void;
 }
 
 export default function RecsCard(data: IStyleCard) {
@@ -32,6 +33,7 @@ export default function RecsCard(data: IStyleCard) {
       text: "Added to wishlist",
       icon: "success",
     });
+    data.fetchRecommendation();
   };
 
   return (
@@ -81,7 +83,9 @@ export default function RecsCard(data: IStyleCard) {
             See Detail
           </Link>
           <button
-            className="btn btn-accent"
+            className={`btn btn-accent ${
+              recommendation.isWishlisted ? "bg-purple-500" : ""
+            }`}
             onClick={() => addToWishlist(recommendation._id.toString())}
           >
             <svg

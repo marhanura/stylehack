@@ -14,6 +14,7 @@ export interface IRecomendation {
   prompt: { type: string; input: string };
   products: IProduct[];
   extraRecommendation?: IExtraRecommendation;
+  isWishlisted: boolean;
 }
 
 interface IExtraRecommendation {
@@ -32,6 +33,7 @@ export default function RecDetailPage({
     userId: "",
     prompt: { type: "", input: "" },
     products: [],
+    isWishlisted: false,
   });
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -60,8 +62,9 @@ export default function RecDetailPage({
     <div className="h-full pt-25 px-10 mb-10">
       <div className="bg-[#E7DFD1] p-10 flex flex-col">
         <h1 className="text-center mb-5">Recommendation Detail</h1>
-        {error? <h1>Error</h1> : recommendation.products?.length === 0 ? (
-
+        {error ? (
+          <h1>Error</h1>
+        ) : recommendation.products?.length === 0 ? (
           <Loading />
         ) : (
           <div className="flex flex-col gap-2">

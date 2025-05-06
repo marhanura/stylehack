@@ -1,4 +1,5 @@
 import CustomError from "@/db/helpers/CustomError";
+import RecomendationModel from "@/db/models/RecomendationModel";
 import WishlistModel from "@/db/models/WishlistModel";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,6 +29,9 @@ export async function DELETE(req: NextRequest, params: IParams) {
       throw new CustomError("Not allowed to delete wishlist", 403);
     }
 
+    await RecomendationModel.updateIsWishlisted(
+      wishlist.recommendationId.toString()
+    );
     await WishlistModel.deleteWishlist(new ObjectId(_id));
 
     return NextResponse.json({

@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
       userId: new ObjectId(userId),
       prompt: { type, input },
       products,
+      isWishlisted: false,
     });
 
     return NextResponse.json({ products });
