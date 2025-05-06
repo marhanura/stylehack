@@ -37,14 +37,14 @@ class FashionSearchAgent:
                     {
                         "category": "XXX",
                         "name": "<product name>",
-                        "urls": [
+                        "links": [
                             "<direct product url>",
                         ]
                     },
                     {
                         "category": "XXX",
                         "name": "<product name>",
-                        "urls": [
+                        "links": [
                             "<direct product url>",
                         ]
                     }
