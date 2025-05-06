@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { IDetail } from "../lookbook/page";
+// import { IDetail } from "../lookbook/page";
 import WishlistCard from "@/components/WishlistCard";
+import { IDetail } from "../lookbook/[id]/layout";
 
 export default function WishlistPage() {
   const [wishlists, setWishlists] = useState<IDetail[]>([]);

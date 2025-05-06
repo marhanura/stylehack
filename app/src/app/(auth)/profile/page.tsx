@@ -7,9 +7,10 @@ import AvatarMale from "@/../public/avatar_male.png";
 import { removeToken } from "../../../../actions";
 import Swal from "sweetalert2";
 import { IUser } from "@/db/models/UserModel";
-import { IDetail } from "../lookbook/page";
+// import { IDetail } from "../lookbook/page";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
+import { IDetail } from "../lookbook/[id]/layout";
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);

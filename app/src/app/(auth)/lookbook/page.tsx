@@ -1,24 +1,13 @@
 "use client";
 import RecsCard from "@/components/RecsCard";
-import {
-  IExtraRecomendation,
-  IPrompt,
-  IRecomendation,
-} from "@/db/models/RecomendationModel";
-import { ObjectId } from "mongodb";
-import { useEffect, useState } from "react";
 
-export interface IDetail {
-  _id: ObjectId;
-  userId: ObjectId;
-  recommendationId?: ObjectId;
-  recommendation: IRecomendation;
-  prompt: IPrompt;
-  extraRecommendation?: IExtraRecomendation;
-}
+import { useEffect, useState } from "react";
+import { IRecomendation } from "./[id]/page";
+
+
 
 export default function LookbookPage() {
-  const [recommendations, setRecommendations] = useState<IDetail[]>([]);
+  const [recommendations, setRecommendations] = useState<IRecomendation[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -26,10 +15,11 @@ export default function LookbookPage() {
     const res = await fetch(
       `http://localhost:3000/api/recommendations?page=${currentPage}`
     );
-    const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.message);
+      const err: {message: string} = await res.json()
+      throw new Error(err.message);
     }
+    const data: {data: IRecomendation[], currentPage: number, totalPage: number} = await res.json();
     setRecommendations(data.data);
     setCurrentPage(data.currentPage);
     setTotalPage(data.totalPage);
