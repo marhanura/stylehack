@@ -38,9 +38,10 @@ export default function RecommendationPage() {
       const { insertedId, products } = await generateRecommendation(form);
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
-    } catch (e: any) {
-      handleError(e.message);
-      if (e.message === "Token run out. Please top up to continue.") {
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e)
+      handleError(message);
+      if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
       }
     } finally {
@@ -57,9 +58,10 @@ export default function RecommendationPage() {
       const { insertedId, products } = await generateRecommendation(form);
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
-    } catch (e: any) {
-      handleError(e.message);
-      if (e.message === "Token run out. Please top up to continue.") {
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e)
+      handleError(message);
+      if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
       }
     } finally {
@@ -76,9 +78,10 @@ export default function RecommendationPage() {
       const { insertedId, products } = await generateRecommendation(form);
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
-    } catch (e: any) {
-      handleError(e.message);
-      if (e.message === "Token run out. Please top up to continue.") {
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e)
+      handleError(message);
+      if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
       }
     } finally {

@@ -1,6 +1,18 @@
+import { ObjectId } from "mongodb";
 import { Metadata } from "next";
-import { IDetail } from "../page";
+
 import { cookies } from "next/headers";
+import { IRecomendation } from "./page";
+import { IExtraRecomendation, IPrompt } from "@/db/models/RecomendationModel";
+
+export interface IDetail {
+  _id: ObjectId;
+  userId: ObjectId;
+  recommendationId?: ObjectId;
+  recommendation: IRecomendation;
+  prompt: IPrompt;
+  extraRecommendation?: IExtraRecomendation;
+}
 
 export interface IParams {
   params: Promise<{ id: string }>;

@@ -37,7 +37,7 @@ export default function OrderHistoryPage() {
       });
       return;
     }
-    const { data, totalPage } = await res.json();
+    const { data, totalPage }: {totalPage: number, data: IOrder[]} = await res.json();
     setTotalPage(totalPage);
     setOrders(data);
     setLoading(false);
