@@ -39,7 +39,8 @@ export default function ProductPreview({ url }: { url: string }) {
         }
       } catch (err: unknown) {
         console.error("Error fetching metadata:", err);
-        setError(err.message || "Failed to load product information");
+        const message = err instanceof Error ? err.message : String(err);
+        setError(message || "Failed to load product information");
       } finally {
         setLoading(false);
       }
