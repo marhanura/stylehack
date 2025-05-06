@@ -27,7 +27,7 @@ export async function generateRecommendation(formData: FormData) {
   if(type !== "image"){
     if (!type || !inputField) throw new Error("Missing prompt");
   }
-  let input = inputField;
+  let input = `${user.gender}, ${user.ageRange}, ${inputField}`;
 
   // 3) if image, upload to Cloudinary
   if (type === "image") {
