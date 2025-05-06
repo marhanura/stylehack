@@ -1,59 +1,87 @@
-"use server";
+"use client";
 import Image from "next/image";
 import Logo from "../../../public/logotext.png";
 import LoginImage from "../../../public/login.webp";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import Link from "next/link";
+import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getToken, setToken } from "../../../actions";
+import Swal from "sweetalert2";
 
-export interface IProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+export default function LoginPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-export async function handleLogin(formData: FormData): Promise<void> {
-  const email = formData.get("email");
-  const password = formData.get("password");
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const token = await getToken();
+        if (token) {
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+      }
+    }
+    checkAuth();
+  }, [router]);
 
-  const res = await fetch(`http://localhost:3000/api/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
-  if (!res.ok) {
-    const data = await res.json();
-    redirect(`/login?error=${data.message}`);
+  async function handleLogin(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      const res = await fetch(`/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        Swal.fire({
+          text: data.message,
+          icon: "error",
+        });
+        setIsLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setToken(data.token);
+      Swal.fire({
+        text: "Login successful",
+        icon: "success",
+        timer: 1500,
+      });
+      router.push("/");
+    } catch (error) {
+      Swal.fire({
+        text: error as string,
+        icon: "error",
+      });
+      setIsLoading(false);
+    }
   }
-  const data = await res.json();
-  const cookieStore = await cookies();
-  cookieStore.set("access_token", data.token);
-  redirect("/");
-}
-
-export default async function LoginPage(props: IProps) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token");
-  if (token) {
-    redirect("/");
-  }
-
-  const { error } = (await props.searchParams) || {};
 
   return (
     <div className="flex flex-row min-h-screen bg-[#E7DFD1] pt-15">
       <form
         className="flex flex-col flex-1 p-15 items-center justify-center"
-        action={handleLogin}
+        onSubmit={handleLogin}
       >
         <Image src={Logo} height={30} alt="Logo" className="mb-5" priority />
         <h1 className="font-(family-name:--font-bodoni-moda) text-[28px]">
           Log In
         </h1>
-        {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
@@ -66,8 +94,11 @@ export default async function LoginPage(props: IProps) {
           name="password"
           placeholder="Password"
         />
-        <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
-          Log In
+        <button
+          className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs"
+          disabled={isLoading}
+        >
+          {isLoading ? "Loading..." : "Log In"}
         </button>
         <p className="mt-5 text-sm">
           Don`t have an account?{" "}

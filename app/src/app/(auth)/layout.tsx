@@ -13,5 +13,5 @@ export default async function AuthLayout(props: IProps) {
     redirect("/login");
   }
 
-  return <>{props.children}</>;
+  return <div className="h-screen">{props.children}</div>;
 }

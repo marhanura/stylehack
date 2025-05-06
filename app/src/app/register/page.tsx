@@ -1,58 +1,92 @@
-"use server";
+"use client";
 import Image from "next/image";
 import Logo from "../../../public/logotext.png";
 import RegisterImage from "../../../public/register.webp";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { IProps } from "../login/page";
-import { cookies } from "next/headers";
+import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getToken } from "../../../actions";
+import Swal from "sweetalert2";
 
-export async function handleRegister(formData: FormData): Promise<void> {
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const gender = formData.get("gender");
-  const ageRange = formData.get("ageRange");
+export default function RegisterPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const res = await fetch(`http://localhost:3000/api/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name,
-      email,
-      password,
-      gender,
-      ageRange,
-    }),
-  });
-  if (!res.ok) {
-    const data = await res.json();
-    redirect(`/register?error=${data.message}`);
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const token = await getToken();
+        if (token) {
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+      }
+    }
+
+    checkAuth();
+  }, [router]);
+
+  async function handleRegister(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const gender = formData.get("gender");
+    const ageRange = formData.get("ageRange");
+
+    try {
+      const res = await fetch(`/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          gender,
+          ageRange,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        Swal.fire({
+          text: data.message,
+          icon: "error",
+        });
+        setIsLoading(false);
+        return;
+      }
+      Swal.fire({
+        text: "Registration successful",
+        icon: "success",
+        timer: 1500,
+      });
+      router.push("/login");
+    } catch (error) {
+      Swal.fire({
+        text: error as string,
+        icon: "error",
+      });
+      setIsLoading(false);
+    }
   }
-  redirect("/login");
-}
-
-export default async function RegisterPage(props: IProps) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token");
-  if (token) {
-    redirect("/");
-  }
-  const { error } = (await props.searchParams) || {};
 
   return (
     <div className="flex flex-row min-h-screen bg-[#E7DFD1] pt-15">
       <form
         className="flex flex-col flex-1 px-15 items-center justify-center"
-        action={handleRegister}
+        onSubmit={handleRegister}
       >
         <Image src={Logo} height={30} alt="Logo" className="mb-5" />
         <h1 className="font-(family-name:--font-bodoni-moda) text-[28px]">
           Register
         </h1>
-        {error && <div className="text-xs text-red-500 mt-5">{error}</div>}
         <input
           className="input my-3 rounded-sm border-0"
           type="text"
@@ -88,8 +122,11 @@ export default async function RegisterPage(props: IProps) {
           <option value="teenager">Teenager</option>
           <option value="adult">Adult</option>
         </select>
-        <button className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs">
-          Register
+        <button
+          className="btn btn-secondary my-3 rounded-sm border-0 w-full max-w-xs"
+          disabled={isLoading}
+        >
+          {isLoading ? "Loading..." : "Register"}
         </button>
         <p className="mt-5 text-sm">
           Already have an account?{" "}
