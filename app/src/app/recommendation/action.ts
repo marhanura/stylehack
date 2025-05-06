@@ -1,4 +1,3 @@
-// src/app/recommendation/action.ts
 "use server";
 
 import { cookies } from "next/headers";
@@ -7,14 +6,19 @@ import { callAiRecommendation, Prompt } from "@/db/helpers/aiHelpers";
 import RecommendationModel from "@/db/models/RecomendationModel";
 import { verifyToken } from "@/db/helpers/jose";
 import { ObjectId } from "mongodb";
+import UserModel from "@/db/models/UserModel";
 
 export async function generateRecommendation(formData: FormData) {
-  // 1) authenticate
-  const cookieStore = await cookies(); // await the cookie store
+  const cookieStore = await cookies();
   const tokenCookie = cookieStore.get("access_token")?.value;
   if (!tokenCookie) throw new Error("Unauthorized");
   const payload = await verifyToken(tokenCookie);
   const userId = payload._id;
+
+  const user = await UserModel.findOne({ _id: new ObjectId(userId) });
+  if (!user) throw new Error("User not found");
+  if (user.quota <= 0)
+    throw new Error("Token run out. Please top up to continue.");
 
   // 2) build prompt
   const type = formData.get("type") as Prompt["type"];
@@ -50,6 +54,8 @@ export async function generateRecommendation(formData: FormData) {
     prompt,
     products,
   });
+
+  await UserModel.decreaseQuota(new ObjectId(userId));
 
   return products;
 }

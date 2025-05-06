@@ -6,8 +6,7 @@ export type Prompt = {
 };
 
 export async function callAiRecommendation(prompt: Prompt) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const res = await fetch(`${baseUrl}/recommend`, {
     method: "POST",

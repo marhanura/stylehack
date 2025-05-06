@@ -4,6 +4,7 @@ import Image1 from "@/../public/image1.webp";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { generateRecommendation } from "./action";
+import { useRouter } from "next/navigation";
 
 type Product = {
   category: string;
@@ -12,6 +13,7 @@ type Product = {
 };
 
 export default function RecommendationPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"image" | "destination" | "free">(
     "image"
   );
@@ -21,6 +23,10 @@ export default function RecommendationPage() {
   const [freeText, setFreeText] = useState("");
   const [result, setResult] = useState<Product[] | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const handleError = (message: string) => {
+    Swal.fire({ title: "Error", text: message, icon: "error" });
+  };
 
   const recByImage = async (file: File) => {
     setLoading(true);
@@ -32,31 +38,49 @@ export default function RecommendationPage() {
       const products = await generateRecommendation(form);
       setResult(products);
     } catch (e: any) {
-      console.log(e);
-      Swal.fire({
-        title: "Error",
-        text: e.message,
-        icon: "error",
-      });
+      handleError(e.message);
+      if (e.message === "Token run out. Please top up to continue.") {
+        router.push("/profile");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const recByDestination = async () => {
-    const form = new FormData();
-    form.append("type", "destination");
-    form.append("input", `${destination} ${style}`);
-    const products = await generateRecommendation(form);
-    setResult(products);
+    setLoading(true);
+    try {
+      const form = new FormData();
+      form.append("type", "destination");
+      form.append("input", `${destination} ${style}`);
+      const products = await generateRecommendation(form);
+      setResult(products);
+    } catch (e: any) {
+      handleError(e.message);
+      if (e.message === "Token run out. Please top up to continue.") {
+        router.push("/profile");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const recByFreeText = async () => {
-    const form = new FormData();
-    form.append("type", "free-text");
-    form.append("input", freeText);
-    const products = await generateRecommendation(form);
-    setResult(products);
+    setLoading(true);
+    try {
+      const form = new FormData();
+      form.append("type", "free-text");
+      form.append("input", freeText);
+      const products = await generateRecommendation(form);
+      setResult(products);
+    } catch (e: any) {
+      handleError(e.message);
+      if (e.message === "Token run out. Please top up to continue.") {
+        router.push("/profile");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (result === undefined) {

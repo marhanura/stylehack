@@ -78,4 +78,15 @@ export default class UserModel {
 
     await collection.updateOne({ _id: _id }, { $set: { quota: quota } });
   }
+
+  static async decreaseQuota(_id: ObjectId) {
+    const collection = this.getCollection();
+    const user = await collection.findOne({ _id });
+    if (user) {
+      await collection.updateOne(
+        { _id: _id },
+        { $set: { quota: user?.quota - 1 } }
+      );
+    }
+  }
 }
