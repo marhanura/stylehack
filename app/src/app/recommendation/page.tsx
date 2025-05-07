@@ -25,7 +25,7 @@ export default function RecommendationPage() {
   const [loading, setLoading] = useState(false);
 
   const handleError = (message: string) => {
-    Swal.fire({ title: "Error", text: message, icon: "error" });
+    Swal.fire({ text: message, icon: "error", timer: 2000 });
   };
 
   const recByImage = async (file: File) => {
@@ -93,6 +93,7 @@ export default function RecommendationPage() {
     Swal.fire({
       title: "no recomendations",
       icon: "error",
+      timer: 2000,
     });
     return;
   }

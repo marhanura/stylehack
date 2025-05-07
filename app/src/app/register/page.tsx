@@ -59,6 +59,7 @@ export default function RegisterPage() {
         Swal.fire({
           text: data.message,
           icon: "error",
+          timer: 2000,
         });
         setIsLoading(false);
         return;
@@ -66,13 +67,14 @@ export default function RegisterPage() {
       Swal.fire({
         text: "Registration successful",
         icon: "success",
-        timer: 1500,
+        timer: 2000,
       });
       router.push("/login");
     } catch (error) {
       Swal.fire({
         text: error as string,
         icon: "error",
+        timer: 2000,
       });
       setIsLoading(false);
     }

@@ -58,6 +58,7 @@ export default function ProfilePage() {
       Swal.fire({
         title: "error",
         icon: "error",
+        timer: 2000,
       });
       return;
     }
