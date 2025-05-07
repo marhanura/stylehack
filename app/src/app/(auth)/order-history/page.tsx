@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -29,7 +30,7 @@ export default function OrderHistoryPage() {
   ]);
 
   const fetchData = async () => {
-    const res = await fetch(`http://localhost:3000/api/order?p=${page}`);
+    const res = await fetch(`${getBaseUrl()}/order?p=${page}`);
     if (!res.ok) {
       Swal.fire({
         title: "error",
@@ -37,7 +38,8 @@ export default function OrderHistoryPage() {
       });
       return;
     }
-    const { data, totalPage }: {totalPage: number, data: IOrder[]} = await res.json();
+    const { data, totalPage }: { totalPage: number; data: IOrder[] } =
+      await res.json();
     setTotalPage(totalPage);
     setOrders(data);
     setLoading(false);

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import Image from "next/image";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 interface Meta {
   title?: string;
@@ -22,7 +23,7 @@ export default function ProductPreview({ url }: { url: string }) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/recommendations`);
+        const response = await fetch(`${getBaseUrl()}/recommendations`);
 
         if (!response.ok) {
           const errorData = await response.json();

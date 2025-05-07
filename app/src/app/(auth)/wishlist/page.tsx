@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 // import { IDetail } from "../lookbook/page";
 import WishlistCard from "@/components/WishlistCard";
 import { IDetail } from "../lookbook/[id]/layout";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export default function WishlistPage() {
   const [wishlists, setWishlists] = useState<IDetail[]>([]);
@@ -11,9 +12,7 @@ export default function WishlistPage() {
 
   const fetchWishlists = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/wishlists?page=${currentPage}`
-      );
+      const res = await fetch(`${getBaseUrl()}/wishlists?page=${currentPage}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.message);
@@ -43,7 +42,7 @@ export default function WishlistPage() {
   };
 
   return (
-    <div className="h-full pt-25 px-10 flex flex-col">
+    <div className="min-h-screen pt-25 px-10 flex flex-col">
       <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
         My Wishlist
       </h1>

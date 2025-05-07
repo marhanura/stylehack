@@ -10,6 +10,7 @@ import { IUser } from "@/db/models/UserModel";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 import { IDetail } from "../lookbook/[id]/layout";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 interface Product {
   category: string;
@@ -47,12 +48,10 @@ interface IWishlist {
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
-  const [tokenLoading, setTokenLoading] = useState(false);
   const router = useRouter();
 
   const handleBuy = async () => {
-    setTokenLoading(true);
-    const resp = await fetch(`http://localhost:3000/api/order`, {
+    const resp = await fetch(`${getBaseUrl()}/order`, {
       method: "POST",
     });
     if (!resp.ok) {
@@ -63,7 +62,6 @@ export default function ProfilePage() {
       return;
     }
     const data: { orderId: string } = await resp.json();
-    setTokenLoading(false);
     router.push(`/payment/${data.orderId}`);
   };
 
@@ -80,7 +78,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch(`http://localhost:3000/api/user`);
+      const res = await fetch(`${getBaseUrl()}/user`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.message);
@@ -89,7 +87,7 @@ export default function ProfilePage() {
       setLoading(false);
     };
     const fetchWishlist = async () => {
-      const res = await fetch(`http://localhost:3000/api/wishlists`);
+      const res = await fetch(`${getBaseUrl()}/wishlists`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.message);
@@ -99,7 +97,7 @@ export default function ProfilePage() {
     };
 
     const fetchRecommendations = async () => {
-      const res = await fetch(`http://localhost:3000/api/recommendations`);
+      const res = await fetch(`${getBaseUrl()}/recommendations`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.message);
@@ -183,23 +181,19 @@ export default function ProfilePage() {
                   </button>
                 </div>
                 <dialog id="buy_token" className="modal">
-                  {tokenLoading ? (
-                    <Loading />
-                  ) : (
-                    <div className="modal-box rounded-none">
-                      <h3 className="font-bold text-lg">Buy Token</h3>
-                      <p className="py-4">Get 10 tokens for Rp. 99.000!</p>
-                      <p>You can create your style only for 1 token.</p>
-                      <div className="modal-action flex justify-between">
-                        <button className="button-slide" onClick={handleBuy}>
-                          Buy Token
-                        </button>
-                        <form method="dialog">
-                          <button className="button-slide">Cancel</button>
-                        </form>
-                      </div>
+                  <div className="modal-box rounded-none">
+                    <h3 className="font-bold text-lg">Buy Token</h3>
+                    <p className="py-4">Get 10 tokens for Rp. 99.000!</p>
+                    <p>You can create your style only for 1 token.</p>
+                    <div className="modal-action flex justify-between">
+                      <button className="button-slide" onClick={handleBuy}>
+                        Buy Token
+                      </button>
+                      <form method="dialog">
+                        <button className="button-slide">Cancel</button>
+                      </form>
                     </div>
-                  )}
+                  </div>
                 </dialog>
                 <button
                   className="button-slide text-sm "
