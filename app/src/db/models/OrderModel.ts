@@ -152,4 +152,18 @@ export default class OrderModel {
     );
     return "Order expire successfully";
   }
+
+  static async setExpireFromMidtrans(orderId: ObjectId) {
+    const collection = this.getCollection();
+    await collection.updateOne(
+      { _id: orderId },
+      {
+        $set: {
+          status: "Expired",
+          updatedAt: new Date(),
+        },
+      }
+    );
+    return "Order expire successfully";
+  }
 }
