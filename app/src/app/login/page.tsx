@@ -7,6 +7,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getToken, setToken } from "../../../actions";
 import Swal from "sweetalert2";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function LoginPage() {
     const password = formData.get("password");
 
     try {
-      const res = await fetch(`/api/login`, {
+      const res = await fetch(`${getBaseUrl()}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

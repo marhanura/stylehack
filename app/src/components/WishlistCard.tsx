@@ -3,6 +3,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { IDetail } from "@/app/(auth)/lookbook/[id]/layout";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export interface IStyleCard {
   data: IDetail;
@@ -21,7 +22,7 @@ export default function WishlistCard(props: IStyleCard) {
       showCancelButton: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await fetch(`/api/wishlists/${id}`, {
+        const res = await fetch(`${getBaseUrl()}/wishlists/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -76,7 +77,10 @@ export default function WishlistCard(props: IStyleCard) {
           ))}
         </div>
         <div className="card-actions justify-end">
-          <Link href={`/wishlist/${wishlist._id}`} className="btn">
+          <Link
+            href={`/lookbook/${wishlist.recommendationId?.toString()}`}
+            className="btn"
+          >
             See Detail
           </Link>
           <button

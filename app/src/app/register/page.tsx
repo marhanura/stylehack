@@ -7,6 +7,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getToken } from "../../../actions";
 import Swal from "sweetalert2";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function RegisterPage() {
     const ageRange = formData.get("ageRange");
 
     try {
-      const res = await fetch(`/api/register`, {
+      const res = await fetch(`${getBaseUrl()}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

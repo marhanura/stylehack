@@ -1,5 +1,6 @@
 "use client";
 
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,7 +15,7 @@ export default function PaymentPage({
   useEffect(() => {
     (async () => {
       const { orderId } = await params;
-      const resp = await fetch(`http://localhost:3000/api/order/${orderId}`);
+      const resp = await fetch(`${getBaseUrl()}/order/${orderId}`);
       if (!resp.ok) {
         router.push("/");
       }

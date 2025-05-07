@@ -6,6 +6,7 @@ import Image from "next/image";
 import { IProduct } from "@/db/models/RecomendationModel";
 import { ObjectId } from "mongodb";
 import Swal from "sweetalert2";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export interface IRecomendation {
   _id: string;
@@ -38,9 +39,7 @@ export default function RecDetailPage({
   useEffect(() => {
     const fetchRecommendation = async () => {
       const { id } = await params;
-      const res = await fetch(
-        `http://localhost:3000/api/recommendations/${id}`
-      );
+      const res = await fetch(`${getBaseUrl()}/recommendations/${id}`);
       if (!res.ok) {
         Swal.fire({
           title: "Not found",

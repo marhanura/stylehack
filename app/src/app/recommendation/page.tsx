@@ -39,7 +39,7 @@ export default function RecommendationPage() {
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e)
+      const message = e instanceof Error ? e.message : String(e);
       handleError(message);
       if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
@@ -59,7 +59,7 @@ export default function RecommendationPage() {
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e)
+      const message = e instanceof Error ? e.message : String(e);
       handleError(message);
       if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
@@ -79,7 +79,7 @@ export default function RecommendationPage() {
       router.push(`/lookbook/${insertedId.toString()}`);
       setResult(products);
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e)
+      const message = e instanceof Error ? e.message : String(e);
       handleError(message);
       if (message === "Token run out. Please top up to continue.") {
         router.push("/profile");
@@ -137,7 +137,7 @@ export default function RecommendationPage() {
                   Where are you going?
                 </legend>
                 <select
-                  className="select"
+                  className="select w-full"
                   name="destination"
                   value={destination}
                   onChange={(e) => setDestination(e.currentTarget.value)}
@@ -154,7 +154,7 @@ export default function RecommendationPage() {
 
                 <legend className="fieldset-legend">How is the style?</legend>
                 <select
-                  className="select"
+                  className="select w-full"
                   name="style"
                   value={style}
                   onChange={(e) => setStyle(e.currentTarget.value)}
@@ -207,7 +207,7 @@ export default function RecommendationPage() {
   };
 
   return (
-    <div className="h-screen pt-25 relative">
+    <div className="h-screen pt-25 px-25 relative w-full">
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-100/50">
           <span className="loader"></span>

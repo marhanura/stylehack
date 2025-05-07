@@ -3,8 +3,7 @@ import RecsCard from "@/components/RecsCard";
 
 import { useEffect, useState } from "react";
 import { IRecomendation } from "./[id]/page";
-
-
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export default function LookbookPage() {
   const [recommendations, setRecommendations] = useState<IRecomendation[]>([]);
@@ -13,13 +12,17 @@ export default function LookbookPage() {
 
   const fetchRecommendations = async () => {
     const res = await fetch(
-      `http://localhost:3000/api/recommendations?page=${currentPage}`
+      `${getBaseUrl()}/recommendations?page=${currentPage}`
     );
     if (!res.ok) {
-      const err: {message: string} = await res.json()
+      const err: { message: string } = await res.json();
       throw new Error(err.message);
     }
-    const data: {data: IRecomendation[], currentPage: number, totalPage: number} = await res.json();
+    const data: {
+      data: IRecomendation[];
+      currentPage: number;
+      totalPage: number;
+    } = await res.json();
     setRecommendations(data.data);
     setCurrentPage(data.currentPage);
     setTotalPage(data.totalPage);
@@ -41,7 +44,7 @@ export default function LookbookPage() {
     }
   };
   return (
-    <div className="h-full pt-25 px-10 flex flex-col">
+    <div className="min-h-screen pt-25 px-10 flex flex-col">
       <h1 className="text-center my-5 text-2xl font-(family-name:--font-bodoni-moda)">
         My Lookbook
       </h1>

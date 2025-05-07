@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { IRecomendation } from "./page";
 import { IExtraRecomendation, IPrompt } from "@/db/models/RecomendationModel";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 export interface IDetail {
   _id: ObjectId;
@@ -23,7 +24,7 @@ export async function generateMetadata(props: IParams): Promise<Metadata> {
   const access_token = cookieStore.get("access_token");
   try {
     const { id } = await props.params;
-    const res = await fetch(`http://localhost:3000/api/recommendations/${id}`, {
+    const res = await fetch(`${getBaseUrl()}/recommendations/${id}`, {
       headers: {
         Cookie: `access_token=${access_token?.value}`,
       },
