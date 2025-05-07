@@ -20,7 +20,8 @@ export async function POST(request: NextRequest) {
     if (
       body.transaction_status !== "settlement" &&
       body.transaction_status !== "capture" &&
-      body.transaction_status !== "pending"
+      body.transaction_status !== "pending" &&
+      body.transaction_status !== "expire"
     ) {
       throw new CustomError("Status not right", 400);
     }
@@ -35,6 +36,11 @@ export async function POST(request: NextRequest) {
 
     if (!order) {
       throw new CustomError("order not found", 404);
+    }
+
+    if (body.transaction_status === "expire") {
+      await OrderModel.setExpireFromMidtrans(order._id);
+      return Response.json({ message: "oke bang" }, { status: 200 });
     }
 
     if (body.transaction_status === "pending") {

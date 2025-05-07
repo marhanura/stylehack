@@ -36,23 +36,70 @@ export default function RecDetailPage({
     isWishlisted: false,
   });
   const [error, setError] = useState(false);
+
+  const fetchRecommendation = async () => {
+    const { id } = await params;
+    const res = await fetch(`${getBaseUrl()}/recommendations/${id}`);
+    if (!res.ok) {
+      Swal.fire({
+        title: "Not found",
+        icon: "error",
+      });
+      setError(true);
+      return;
+    }
+    const data: IRecomendation = await res.json();
+    setRecommendation(data);
+  };
   useEffect(() => {
-    const fetchRecommendation = async () => {
-      const { id } = await params;
-      const res = await fetch(`${getBaseUrl()}/recommendations/${id}`);
-      if (!res.ok) {
-        Swal.fire({
-          title: "Not found",
-          icon: "error",
-        });
-        setError(true);
-        return;
-      }
-      const data: IRecomendation = await res.json();
-      setRecommendation(data);
-    };
     fetchRecommendation();
   }, [params]);
+
+  const addToWishlist = async (id: string) => {
+    const res = await fetch(`${getBaseUrl()}/wishlists`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ recommendationId: id }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      Swal.fire({
+        text: data.message,
+        icon: "error",
+      });
+      return;
+    }
+    Swal.fire({
+      text: "Added to wishlist",
+      icon: "success",
+    });
+    fetchRecommendation();
+  };
+
+  const removeFromWishlist = async (recommendationId: string) => {
+    const res = await fetch(`${getBaseUrl()}/wishlists`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ recommendationId }),
+    });
+    if (!res.ok) {
+      const data: { message: string } = await res.json();
+      Swal.fire({
+        text: data.message,
+        icon: "error",
+      });
+      return;
+    }
+    Swal.fire({
+      text: "Removed from wishlist",
+      icon: "success",
+    });
+    fetchRecommendation();
+  };
 
   const recDetail = () => {
     return (
@@ -148,6 +195,29 @@ export default function RecDetailPage({
                 </p>
                 {recDetail()}
               </div>
+              <button
+                className="btn btn-accent "
+                onClick={
+                  recommendation.isWishlisted
+                    ? () => removeFromWishlist(recommendation._id.toString())
+                    : () => addToWishlist(recommendation._id.toString())
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={recommendation.isWishlisted ? "currentColor" : "none"}
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+              </button>
             </div>
           ) : (
             <div className="card bg-base-100 shadow-sm rounded-none flex flex-col">
@@ -163,6 +233,29 @@ export default function RecDetailPage({
                 </p>
                 {recDetail()}
               </div>
+              <button
+                className="btn btn-accent "
+                onClick={
+                  recommendation.isWishlisted
+                    ? () => removeFromWishlist(recommendation._id.toString())
+                    : () => addToWishlist(recommendation._id.toString())
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={recommendation.isWishlisted ? "currentColor" : "none"}
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+              </button>
             </div>
           )}
         </div>
