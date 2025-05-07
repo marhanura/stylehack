@@ -52,6 +52,7 @@ export default function LoginPage() {
         Swal.fire({
           text: data.message,
           icon: "error",
+          timer: 2000,
         });
         setIsLoading(false);
         return;
@@ -61,13 +62,14 @@ export default function LoginPage() {
       Swal.fire({
         text: "Login successful",
         icon: "success",
-        timer: 1500,
+        timer: 2000,
       });
       router.push("/");
     } catch (error) {
       Swal.fire({
         text: error as string,
         icon: "error",
+        timer: 2000,
       });
       setIsLoading(false);
     }

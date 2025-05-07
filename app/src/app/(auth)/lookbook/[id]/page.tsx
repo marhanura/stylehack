@@ -44,6 +44,7 @@ export default function RecDetailPage({
       Swal.fire({
         title: "Not found",
         icon: "error",
+        timer: 2000,
       });
       setError(true);
       return;
@@ -68,12 +69,14 @@ export default function RecDetailPage({
       Swal.fire({
         text: data.message,
         icon: "error",
+        timer: 2000,
       });
       return;
     }
     Swal.fire({
       text: "Added to wishlist",
       icon: "success",
+      timer: 2000,
     });
     fetchRecommendation();
   };
@@ -91,12 +94,14 @@ export default function RecDetailPage({
       Swal.fire({
         text: data.message,
         icon: "error",
+        timer: 2000,
       });
       return;
     }
     Swal.fire({
       text: "Removed from wishlist",
       icon: "success",
+      timer: 2000,
     });
     fetchRecommendation();
   };
@@ -234,7 +239,7 @@ export default function RecDetailPage({
                 {recDetail()}
               </div>
               <button
-                className="btn btn-accent "
+                className="btn btn-accent w-15 self-end mr-5 mb-5"
                 onClick={
                   recommendation.isWishlisted
                     ? () => removeFromWishlist(recommendation._id.toString())

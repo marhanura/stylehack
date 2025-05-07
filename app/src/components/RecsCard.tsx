@@ -26,12 +26,14 @@ export default function RecsCard(data: IStyleCard) {
       Swal.fire({
         text: data.message,
         icon: "error",
+        timer: 2000,
       });
       return;
     }
     Swal.fire({
       text: "Added to wishlist",
       icon: "success",
+      timer: 2000,
     });
     data.fetchRecommendation();
   };
@@ -49,12 +51,14 @@ export default function RecsCard(data: IStyleCard) {
       Swal.fire({
         text: data.message,
         icon: "error",
+        timer: 2000,
       });
       return;
     }
     Swal.fire({
       text: "Removed from wishlist",
       icon: "success",
+      timer: 2000,
     });
     data.fetchRecommendation();
   };

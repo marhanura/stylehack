@@ -33,12 +33,14 @@ export default function WishlistCard(props: IStyleCard) {
           Swal.fire({
             text: data.message,
             icon: "error",
+            timer: 2000,
           });
           return;
         }
         Swal.fire({
           text: "Removed from wishlist",
           icon: "success",
+          timer: 2000,
         });
         if (onDelete) onDelete();
         router.refresh();
