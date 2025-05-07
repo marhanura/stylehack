@@ -67,7 +67,7 @@ export default function RecsCard(data: IStyleCard) {
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
         <div className="h-[400px] overflow-auto custom-scrollbar">
-          <div className="badge badge-secondary">
+          <div className="badge badge-secondary rounded-none">
             {recommendation.prompt.type}
           </div>
           {recommendation.prompt.input.includes("cloudinary") ? (
@@ -87,7 +87,7 @@ export default function RecsCard(data: IStyleCard) {
           {recommendation.products?.map((product, index: number) => (
             <div key={index} className="flex flex-col gap-3">
               <p className="text-sm my-2">
-                <span className="badge badge-accent border-none mr-2">
+                <span className="badge badge-accent border-none mr-2 rounded-none">
                   {product.category}
                 </span>
                 <span className="capitalize">{product.name}</span>
@@ -96,11 +96,14 @@ export default function RecsCard(data: IStyleCard) {
           ))}
         </div>
         <div className="card-actions justify-end mt-3">
-          <Link href={`/lookbook/${recommendation._id}`} className="btn">
+          <Link
+            href={`/lookbook/${recommendation._id}`}
+            className="btn btn-secondary rounded-none border-none shadow-none"
+          >
             See Detail
           </Link>
           <button
-            className="btn btn-accent "
+            className="btn btn-accent rounded-none border-none shadow-none"
             onClick={
               recommendation.isWishlisted
                 ? () => removeFromWishlist(recommendation._id.toString())

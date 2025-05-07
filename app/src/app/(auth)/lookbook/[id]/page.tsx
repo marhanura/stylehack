@@ -111,7 +111,7 @@ export default function RecDetailPage({
       <div>
         <Link
           href="/lookbook"
-          className="btn btn-content shadow-none mb-5 w-30 h-[30px] p-2 absolute top-10"
+          className="btn btn-primary border-none rounded-none shadow-none mb-5 w-30 h-[30px] p-2 absolute top-10"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +131,7 @@ export default function RecDetailPage({
         </Link>
         <Link
           href="/wishlist"
-          className="btn btn-content shadow-none mb-5 w-25 h-[30px] p-2 absolute top-10 right-10"
+          className="btn btn-primary rounded-none border-none shadow-none mb-5 w-25 h-[30px] p-2 absolute top-10 right-10"
         >
           Wishlist{" "}
           <svg
@@ -152,7 +152,7 @@ export default function RecDetailPage({
         {recommendation?.products?.map((product, index) => (
           <div key={index}>
             <p className="text-sm my-2">
-              <span className="badge badge-accent border-none mr-2">
+              <span className="badge badge-accent rounded-none border-none mr-2">
                 {product.category}
               </span>
               <span className="font-medium capitalize">{product.name}</span>
@@ -172,7 +172,6 @@ export default function RecDetailPage({
       </div>
     );
   };
-
   return (
     <div className="min-h-screen pt-25 px-25 mb-10">
       {error ? (
@@ -182,17 +181,18 @@ export default function RecDetailPage({
       ) : (
         <div>
           {recommendation.prompt.input.includes("cloudinary") ? (
-            <div className="card lg:card-side bg-base-100 shadow-sm rounded-none ">
-              <figure className="w-100">
+            <div className="card lg:card-side bg-base-100 shadow-sm rounded-none relative">
+              <figure className="w-200">
                 <Image
                   src={recommendation.prompt.input}
                   alt="Image recommendation"
-                  width={300}
-                  height={200}
+                  width={500}
+                  height={400}
+                  className="object-cover"
                 />
               </figure>
               <div className="w-full p-10 flex flex-col justify-start gap-3">
-                <p className="badge badge-secondary self-center">
+                <p className="badge badge-secondary border-none rounded-none self-center">
                   {recommendation?.prompt.type}
                 </p>
                 <p className="text-center text-lg mb-3">
@@ -201,7 +201,7 @@ export default function RecDetailPage({
                 {recDetail()}
               </div>
               <button
-                className="btn btn-accent "
+                className="btn btn-accent shadow-none border-none rounded-none absolute bottom-5 right-5"
                 onClick={
                   recommendation.isWishlisted
                     ? () => removeFromWishlist(recommendation._id.toString())
@@ -225,9 +225,9 @@ export default function RecDetailPage({
               </button>
             </div>
           ) : (
-            <div className="card bg-base-100 shadow-sm rounded-none flex flex-col">
+            <div className="card bg-base-100 shadow-sm rounded-none flex flex-col relative">
               <div className="card-body w-full p-10">
-                <p className="badge badge-secondary self-center">
+                <p className="badge badge-secondary rounded-none self-center">
                   {recommendation?.prompt.type}
                 </p>
                 <p className="text-center text-lg mb-3">
@@ -239,7 +239,7 @@ export default function RecDetailPage({
                 {recDetail()}
               </div>
               <button
-                className="btn btn-accent w-15 self-end mr-5 mb-5"
+                className="btn btn-accent rounded-none absolute bottom-5 right-5"
                 onClick={
                   recommendation.isWishlisted
                     ? () => removeFromWishlist(recommendation._id.toString())

@@ -52,7 +52,7 @@ export default function WishlistCard(props: IStyleCard) {
     <div className="card bg-base-100 h-[500px] w-full rounded-none justify-start p-10">
       <div className="flex flex-col justify-start h-full gap-2 my-3">
         <div className="h-[400px] overflow-auto">
-          <div className="badge badge-secondary">
+          <div className="badge badge-secondary rounded-none">
             {wishlist.recommendation.prompt.type}
           </div>
           {wishlist.recommendation.prompt.input.includes("cloudinary") ? (
@@ -70,7 +70,7 @@ export default function WishlistCard(props: IStyleCard) {
           {wishlist.recommendation.products?.map((product, index) => (
             <div key={index} className="flex flex-col gap-3">
               <p className="text-sm my-2">
-                <span className="badge badge-accent border-none mr-2">
+                <span className="badge badge-accent border-none mr-2 rounded-none">
                   {product.category}
                 </span>
                 <span className="capitalize">{product.name}</span>
@@ -81,12 +81,12 @@ export default function WishlistCard(props: IStyleCard) {
         <div className="card-actions justify-end">
           <Link
             href={`/lookbook/${wishlist.recommendationId?.toString()}`}
-            className="btn"
+            className="btn btn-secondary rounded-none shadow-none border-none"
           >
             See Detail
           </Link>
           <button
-            className="btn btn-accent"
+            className="btn btn-accent rounded-none shadow-none border-none"
             onClick={() => removeWishlist(wishlist._id.toString())}
           >
             <svg
