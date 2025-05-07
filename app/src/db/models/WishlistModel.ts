@@ -190,4 +190,17 @@ export default class WishlistModel {
     }
     return wishlists[0];
   }
+
+  static async deleteWishlistByRecommendationId(
+    userId: ObjectId,
+    recommendationId: ObjectId
+  ) {
+    const collection = this.getCollection();
+    const wishlist = await collection.findOne({ userId, recommendationId });
+    if (!wishlist) {
+      throw new CustomError("Wishlist not found", 404);
+    }
+    await collection.deleteOne({ userId, recommendationId });
+    return "Successfully removed recommendation from wishlist";
+  }
 }

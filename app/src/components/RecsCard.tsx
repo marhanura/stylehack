@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { IRecomendation } from "@/app/(auth)/lookbook/[id]/page";
+import { getBaseUrl } from "@/db/helpers/getBaseUrl";
 
 interface IStyleCard {
   data: IRecomendation;
@@ -13,7 +14,7 @@ export default function RecsCard(data: IStyleCard) {
   const recommendation: IRecomendation = data.data;
 
   const addToWishlist = async (id: string) => {
-    const res = await fetch("/api/wishlists", {
+    const res = await fetch(`${getBaseUrl()}/wishlists`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +31,29 @@ export default function RecsCard(data: IStyleCard) {
     }
     Swal.fire({
       text: "Added to wishlist",
+      icon: "success",
+    });
+    data.fetchRecommendation();
+  };
+
+  const removeFromWishlist = async (recommendationId: string) => {
+    const res = await fetch(`${getBaseUrl()}/wishlists`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ recommendationId }),
+    });
+    if (!res.ok) {
+      const data: { message: string } = await res.json();
+      Swal.fire({
+        text: data.message,
+        icon: "error",
+      });
+      return;
+    }
+    Swal.fire({
+      text: "Removed from wishlist",
       icon: "success",
     });
     data.fetchRecommendation();
@@ -73,7 +97,11 @@ export default function RecsCard(data: IStyleCard) {
           </Link>
           <button
             className="btn btn-accent "
-            onClick={() => addToWishlist(recommendation._id.toString())}
+            onClick={
+              recommendation.isWishlisted
+                ? () => removeFromWishlist(recommendation._id.toString())
+                : () => addToWishlist(recommendation._id.toString())
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

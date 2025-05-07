@@ -74,3 +74,36 @@ export async function GET(req: NextRequest) {
     return Response.json({ message: "ISE" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const userId = req.headers.get("x-user-id");
+    if (!userId) {
+      throw new CustomError("Unauthorized", 401);
+    }
+
+    const { recommendationId }: { recommendationId: string } = await req.json();
+    if (!recommendationId) {
+      throw new CustomError("recommendationId is required", 400);
+    }
+
+    await RecomendationModel.updateIsWishlisted(recommendationId);
+
+    const message = await WishlistModel.deleteWishlistByRecommendationId(
+      new ObjectId(userId),
+      new ObjectId(recommendationId)
+    );
+
+    return NextResponse.json({
+      message,
+    });
+  } catch (error) {
+    if (error instanceof CustomError) {
+      return Response.json(
+        { message: error.message },
+        { status: error.status }
+      );
+    }
+    return Response.json({ message: "ISE" }, { status: 500 });
+  }
+}
