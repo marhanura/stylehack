@@ -46,7 +46,7 @@ class FashionSearchAgentforimage:
             temperature=0,
             seed=42,
             top_p=0.002,
-            max_retries=15,
+            max_retries=20,
         )
 
 
@@ -70,7 +70,7 @@ class FashionSearchAgentforimage:
             name="product_search_based_on_information",  # Modified name with underscores
             func=search_and_format,
             description=self.prompt,
-            max_retries=15,
+            max_retries=20,
             verbose=True,  # Set verbose to True for detailed output
             early_stopping_method="generate",  # Added early stopping method
         )

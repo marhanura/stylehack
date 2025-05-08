@@ -26,6 +26,9 @@ class FashionSearchAgent:
             5. You need to make sure the link is available, because i always found that the link is not available anymore
             6. Only use urls that point directly to specific product pages, never to search results pages.
             7. Use the following categories: "Top", "Bottom", "Outer", "Footwear", "Accessories", "Bag", "Dress", "Jumpsuit", "Swimwear", "Lingerie", "Sleepwear", "Activewear".
+            8. If the user input is not related to fashion, return an empty JSON object.
+            9. The gender make it based on the user input (male, female)
+            10. The age group make it based on the user input (child, teenager, adult)
 
             IMPORTANT OUTPUT FORMATTING:
             - Return ONLY the JSON object, without any additional text, explanation, or markdown formatting
@@ -61,7 +64,7 @@ class FashionSearchAgent:
             temperature=0,
             seed=42,
             top_p=0.002,
-            max_retries=15,
+            max_retries=20,
         )
 
         # Create a wrapper function to ensure search results are properly formatted as strings
@@ -83,7 +86,7 @@ class FashionSearchAgent:
             name="product_search_based_on_information",  # Modified name with underscores
             func=search_and_format,
             description=self.prompt,
-            max_retries=15,
+            max_retries=20,
             verbose=True,  # Set verbose to True for detailed output
             early_stopping_method="generate",  # Added early stopping method
         )
